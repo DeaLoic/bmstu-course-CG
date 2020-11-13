@@ -42,7 +42,7 @@
             this.mainCanvas.BackColor = System.Drawing.Color.White;
             this.mainCanvas.Location = new System.Drawing.Point(2, 3);
             this.mainCanvas.Name = "mainCanvas";
-            this.mainCanvas.Size = new System.Drawing.Size(847, 636);
+            this.mainCanvas.Size = new System.Drawing.Size(800, 600);
             this.mainCanvas.TabIndex = 0;
             this.mainCanvas.TabStop = false;
             // 

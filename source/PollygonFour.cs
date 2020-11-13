@@ -4,33 +4,28 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace PerlinLandscape
 {
     class PollygonFour : Object
     {
-        Dot3d a;
-        public Dot3d A { get { return ApplyTransformations(a); } }
+        public Dot3d A;
+        public Dot3d B;
+        public Dot3d C;
+        public Dot3d D;
 
-        Dot3d b;
-        public Dot3d B { get { return ApplyTransformations(b); } }
-
-        Dot3d c;
-        public Dot3d C { get { return ApplyTransformations(c); } }
-
-        Dot3d d;
-        public Dot3d D { get { return ApplyTransformations(d); } }
-
-        List<Transformation3d> transformations;
         public List<Dot3d> pointsInside;
+        public Color color;
         public PollygonFour(Dot3d A, Dot3d B, Dot3d C, Dot3d D)
         {
-            this.a = A;
-            this.b = B;
-            this.c = C;
-            this.d = D;
+            this.A = A;
+            this.B = B;
+            this.C = C;
+            this.D = D;
             this.pointsInside = new List<Dot3d>();
-            this.transformations = new List<Transformation3d>();
+            double colorInt = (int)(A.Z + B.Z + C.Z + D.Z) / 4;
+            color = Color.FromArgb((int)colorInt / 499 == 0 ? Math.Abs((int)(colorInt / 499 * 255)) : 255, 0, 0);
         }
 
         public void CalculatePointsInside(int maxX, int maxY)
@@ -57,8 +52,8 @@ namespace PerlinLandscape
 
             for (int i = 0; i < 3; ++i)
             {
-                x[i] = v[i].X;
-                y[i] = v[i].Y;
+                x[i] = (int)(v[i].X / v[i].W);
+                y[i] = (int)(v[i].Y / v[i].W);
             }
 
             yMax = y.Max();
@@ -120,32 +115,6 @@ namespace PerlinLandscape
         public override PollygonFour[] GetPollygonsFour()
         {
             return new PollygonFour[]{ this };
-        }
-        public override void Transform(Transformation3d transformation)
-        {
-            if (transformations.Count == 0)
-            {
-                transformations.Add(transformation);
-            }
-            else
-            {
-                transformations.Add(transformation);
-                a = transformations[0].Apply(a);
-                b = transformations[0].Apply(b);
-                c = transformations[0].Apply(c);
-                d = transformations[0].Apply(d);
-                transformations.RemoveAt(0);
-            }
-        }
-
-        private Dot3d ApplyTransformations(Dot3d dot)
-        {
-            Dot3d dotResult = dot.Copy();
-            for (int i = 0; i < transformations.Count; i++)
-            {
-                dotResult = transformations[i].Apply(dot);
-            }
-            return dotResult;
         }
     }
 }

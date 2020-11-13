@@ -47,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="MathSupport.cs" />
+    <Compile Include="MatrixTransform.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="Cube.cs" />
     <Compile Include="Drawer.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Dot3d.cs" />

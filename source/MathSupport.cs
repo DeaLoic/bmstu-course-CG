@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace PerlinLandscape
 {
-    abstract class Object
+    public static class MathSupport
     {
-        public abstract PollygonFour[] GetPollygonsFour();
+        public static double ToRadian(double angle)
+        {
+            return Math.PI * angle / 180;
+        }
     }
 }

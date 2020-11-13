@@ -39,27 +39,32 @@ namespace PerlinLandscape
         static private void ProcessModel(int[][] buffer, Bitmap image, Object o, Camera camera)
         {
             Color draw;
-            foreach (PollygonFour polygon in o.GetPollygonsFour())
+            foreach (PollygonFour pol in o.GetPollygonsFour())
             {
+                PollygonFour polygon = new PollygonFour(camera.Proect(pol.A.Copy()),
+                                           camera.Proect(pol.B.Copy()),
+                                           camera.Proect(pol.C.Copy()),
+                                           camera.Proect(pol.D.Copy()));
                 polygon.CalculatePointsInside(image.Width, image.Height);
-                draw = Color.FromArgb(Math.Abs(polygon.A.Z) % 255, 0, 0);
-                foreach (Dot3d point in polygon.pointsInside)
+                draw = pol.color;
+                foreach (Dot3d point in polygon.pointsInside)//new Dot3d[] { polygon.A, polygon.B, polygon.C, polygon.D })
                 {
-                    ProcessPoint(buffer, image, camera.GetTransform(point), draw);
+                    ProcessPoint(buffer, image, point, draw);
                 }
             }
         }
 
-        static private void ProcessPoint(int[][] buffer, Bitmap image, Dot3d point, Color color, int w = 1000, int h = 500)
+        static private void ProcessPoint(int[][] buffer, Bitmap image, Dot3d point, Color color)
         {
-            int hDiv2 = image.Height / 2;
-            int wDiv2 = image.Width / 2;
-            if (!(point.X < -wDiv2 || point.X > wDiv2 || point.Y < -hDiv2 || point.Y > hDiv2))
+            int h = image.Height;
+            int w = image.Width;
+            point = new Dot3d(point.X / point.W, point.Y / point.W, point.Z / point.W);
+            if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h))
             {
-                if (point.Z > buffer[point.Y + hDiv2][point.X + wDiv2])
+                if (point.Z > buffer[(int)point.Y][(int)point.X])
                 {
-                    buffer[point.Y + hDiv2][point.X + wDiv2] = point.Z;
-                    image.SetPixel(point.X + wDiv2, point.Y + hDiv2, color);
+                    buffer[(int)point.Y][(int)point.X] = (int)point.Z;
+                    image.SetPixel((int)point.X, (int)point.Y, color);
                 }
             }
         }

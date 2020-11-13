@@ -24,12 +24,13 @@ namespace PerlinLandscape
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            HeightMap newHeightMap = new HeightMap(100, 100);
-            newHeightMap.FillTriangle();
+            HeightMap newHeightMap = new HeightMap(500, 500);
+            newHeightMap.Generate();
 
-            Landscape landscape = new Landscape(newHeightMap);
-            scene.AddObject(landscape);
-            scene.camera.Rotate(0, 0, 10);
+            //Landscape landscape = new Landscape(newHeightMap);
+            //scene.AddObject(landscape);
+            scene.AddObject(new Cube(500));
+            //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
 
@@ -48,19 +49,19 @@ namespace PerlinLandscape
 
         private void button2_Click(object sender, EventArgs e)
         {
-            scene.camera.Move(0, 0, 10);
+            scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            scene.camera.Move(0, 10, 0);
+            scene.camera.Move(10, 0, 0);
             UpdateBitmap(scene);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            scene.camera.Move(10, 0, 0);
+            scene.camera.Scale(2);
             UpdateBitmap(scene);
         }
     }

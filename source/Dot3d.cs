@@ -8,18 +8,32 @@ namespace PerlinLandscape
 {
     class Dot3d
     {
-        public int X;
-        public int Y;
-        public int Z;
-        public Dot3d(int x, int y, int z)
+        public double X;
+        public double Y;
+        public double Z;
+        public double W;
+        public Dot3d(double x = 0, double y = 0, double z = 0, double w = 1)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
+            this.W = w;
         }
+
         public Dot3d Copy()
         {
-            return new Dot3d(X, Y, Z);
+            return new Dot3d(X, Y, Z, W);
+        }
+    }
+
+    class Point3D
+    {
+        public int x, y, z;
+        public Point3D(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
     }
 }

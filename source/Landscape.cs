@@ -23,14 +23,6 @@ namespace PerlinLandscape
             return polygons;
         }
 
-        public override void Transform(Transformation3d transformation)
-        {
-            for (int i = 0; i < polygons.Length; i++)
-            {
-                polygons[i].Transform(transformation);
-            }
-        }
-
         private void FormPollygons()
         {
             polygons = new PollygonFour[(heightMap.Width - 1) * (heightMap.Height - 1)];
