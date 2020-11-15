@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PerlinLandscape
 {
-    class Drawer
+    abstract class DrawAlgorithm
     {
+        public abstract void Process(Bitmap bitmap, Scene scene);
     }
 }

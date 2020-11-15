@@ -46,28 +46,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
-    <Compile Include="MathSupport.cs" />
-    <Compile Include="MatrixTransform.cs" />
-    <Compile Include="Matrix.cs" />
-    <Compile Include="Converter.cs" />
-    <Compile Include="Cube.cs" />
-    <Compile Include="Drawer.cs" />
-    <Compile Include="Transform.cs" />
-    <Compile Include="Dot3d.cs" />
-    <Compile Include="PollygonFour.cs" />
-    <Compile Include="Object.cs" />
-    <Compile Include="Landscape.cs" />
-    <Compile Include="Scene.cs" />
-    <Compile Include="ZBuffer.cs" />
-    <Compile Include="HeightMap.cs" />
+    <Compile Include="Objects\Camera.cs" />
+    <Compile Include="DrawAlgorithm\DrawAlgorithm.cs" />
+    <Compile Include="GraphicMath\MathSupport.cs" />
+    <Compile Include="GraphicMath\MatrixTransform.cs" />
+    <Compile Include="GraphicMath\Matrix.cs" />
+    <Compile Include="GraphicMath\Converter.cs" />
+    <Compile Include="Objects\Cube.cs" />
+    <Compile Include="Drawer\Drawer.cs" />
+    <Compile Include="GraphicMath\Transform.cs" />
+    <Compile Include="Primitives\Dot3d.cs" />
+    <Compile Include="Objects\PollygonFour.cs" />
+    <Compile Include="Objects\Object.cs" />
+    <Compile Include="Objects\Landscape.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="DrawAlgorithm\ZBuffer.cs" />
+    <Compile Include="HeightMap\HeightMap.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PerlinNoize.cs" />
+    <Compile Include="HeightMap\PerlinNoize.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -95,5 +96,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

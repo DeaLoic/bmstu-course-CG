@@ -8,6 +8,13 @@ namespace PerlinLandscape
 {
     abstract class Object
     {
+        bool isVisible;
+        public bool IsVisible { get { return isVisible; } }
+
+        public Object(bool isVisible = true)
+        {
+            this.isVisible = isVisible;
+        }
         public abstract PollygonFour[] GetPollygonsFour();
     }
 }

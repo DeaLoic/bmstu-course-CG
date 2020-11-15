@@ -24,12 +24,12 @@ namespace PerlinLandscape
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            HeightMap newHeightMap = new HeightMap(500, 500);
+            HeightMap newHeightMap = new HeightMap(10, 10);
             newHeightMap.Generate();
 
             //Landscape landscape = new Landscape(newHeightMap);
             //scene.AddObject(landscape);
-            scene.AddObject(new Cube(500));
+            scene.AddObject(new Cube(100));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
@@ -37,7 +37,8 @@ namespace PerlinLandscape
         private void UpdateBitmap(Scene scene)
         {
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
-            ZBuffer.Process(bitmap, scene);
+
+            new Drawer(new ZBuffer()).Draw(bitmap, scene);
             mainCanvas.Image = bitmap;
         }
 
@@ -53,15 +54,27 @@ namespace PerlinLandscape
             UpdateBitmap(scene);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonRotate_Click(object sender, EventArgs e)
         {
-            scene.camera.Move(10, 0, 0);
+            int x = Convert.ToInt32(textBoxXRotate.Text);
+            int y = Convert.ToInt32(textBoxYRotate.Text);
+            int z = Convert.ToInt32(textBoxZRotate.Text);
+            scene.camera.Rotate(x, y, z);
             UpdateBitmap(scene);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             scene.camera.Scale(2);
+            UpdateBitmap(scene);
+        }
+
+        private void buttonMove_Click(object sender, EventArgs e)
+        {
+            int x = Convert.ToInt32(textBoxXMove.Text);
+            int y = Convert.ToInt32(textBoxYMove.Text);
+            int z = Convert.ToInt32(textBoxZMove.Text);
+            scene.camera.Move(x, y, z);
             UpdateBitmap(scene);
         }
     }

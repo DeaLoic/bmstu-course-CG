@@ -25,10 +25,10 @@ namespace PerlinLandscape
             this.D = D;
             this.pointsInside = new List<Dot3d>();
             double colorInt = (int)(A.Z + B.Z + C.Z + D.Z) / 4;
-            color = Color.FromArgb((int)colorInt / 499 == 0 ? Math.Abs((int)(colorInt / 499 * 255)) : 255, 0, 0);
+            color = Color.FromArgb((int)colorInt / 100 == 0 ? Math.Abs((int)(colorInt / 100 * 255)) : 255, 0, 0);
         }
 
-        public void CalculatePointsInside(int maxX, int maxY)
+        public void CalculatePointsInside(int maxX, int maxY, int minX=0, int minY=0)
         {
             pointsInside = new List<Dot3d>();
 
@@ -36,12 +36,12 @@ namespace PerlinLandscape
             triangle.Add(A);
             triangle.Add(C);
             triangle.Add(B);
-            CalculatePointsInsideTriangle(triangle, maxX, maxY);
+            CalculatePointsInsideTriangle(triangle, maxX, maxY, minX, minY);
             triangle = new List<Dot3d>();
             triangle.Add(A);
             triangle.Add(C);
             triangle.Add(D);
-            CalculatePointsInsideTriangle(triangle, maxX, maxY);
+            CalculatePointsInsideTriangle(triangle, maxX, maxY, minX, minY);
             
         }
 
@@ -79,12 +79,12 @@ namespace PerlinLandscape
                     if (fFirst == 0)
                     {
                         x2 = x[n] + (int)(m * (x[n1] - x[n]));
-                        z2 = v[n].Z + m * (v[n1].Z - v[n].Z);
+                        z2 = (v[n].Z / v[n].W) + m * ((v[n1].Z / v[n1].W) - (v[n].Z/ v[n].W));
                     }
                     else
                     {
                         x1 = x[n] + (int)(m * (x[n1] - x[n]));
-                        z1 = v[n].Z + m * (v[n1].Z - v[n].Z);
+                        z1 = (v[n].Z / v[n].W) + m * ((v[n1].Z / v[n1].W) - (v[n].Z/ v[n].W));
                     }
                     fFirst = 0;
                 }

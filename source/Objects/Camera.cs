@@ -9,10 +9,11 @@ namespace PerlinLandscape
     class Camera
     {
         Dot3d place;
-        int focus;
+        double focus;
         int angleX;
         int angleY;
         Dot3d rotate;
+        double scale = 0;
         MatrixTransform transform = new MatrixTransform();
         double xScale, yScale;
 
@@ -22,8 +23,8 @@ namespace PerlinLandscape
             this.focus = focus;
             this.angleX = angleX;
             this.angleY = angleY;
-            this.yScale = 1.0 / Math.Tan(MathSupport.ToRadian(angleY / 2));
-            this.xScale = yScale / (800 / 600);
+            this.yScale = 1.0 / Math.Tan(MathSupport.ToRadian(angleY / (double)2));
+            this.xScale = 1;// yScale / (800 / (double)600);
             transform = new MatrixTransform();
             rotate = new Dot3d(0, 0, 0);
         }
@@ -56,26 +57,57 @@ namespace PerlinLandscape
 
         public void Scale(double ko)
         {
-            MatrixTransform matrix = new MatrixTransform();
-            matrix.SetScaleGlobal(ko);
-            transform = transform.MultiplyVinograd(matrix);
+            scale += ko;
         }
 
         public Dot3d ApplyTransform(Dot3d dot)
         {
-            return transform.Apply(dot);
+            MatrixTransform matrix = new MatrixTransform();
+            matrix.SetRotate(rotate.X, rotate.Y, rotate.Z);
+            Dot3d newDot = matrix.Apply(dot);
+            matrix.SetScaleGlobal(scale);
+            newDot = matrix.Apply(newDot);
+            matrix.SetTransfer(-place.X, -place.Y, -place.Z);
+
+            return matrix.Apply(newDot);
         }
         public Dot3d Proect(Dot3d dot)
         {
             Dot3d newDot = ApplyTransform(dot);
-            transform[0, 0] = xScale;
-            transform[1, 1] = yScale;
-            transform[2, 3] = 1 / focus;
-            double z_f = 10000;
-            transform[2, 2] = z_f / (z_f - focus);
-            transform[3, 2] = transform[2, 2] * (-focus);
+            MatrixTransform matrix = new MatrixTransform();
 
-            return transform.Apply(newDot);
+            /*
+            matrix[0, 0] = xScale;
+            matrix[1, 1] = yScale;
+            matrix[2, 3] = -1;
+            double z_f = 1000;
+            focus = 0.1;
+            matrix[2, 2] = (z_f + focus) / (focus - z_f);
+            matrix[3, 2] = (2 * focus * z_f) / (focus - z_f);
+            matrix[3, 3] = 0;
+            */
+            /*
+             matrix[0, 0] = xScale;
+            matrix[1, 1] = yScale;
+            matrix[2, 3] = -1 / (double)1;
+            double z_f = -100000;
+            focus = 1;
+            matrix[2, 2] = z_f / (z_f - focus);
+            matrix[3, 2] = matrix[2, 2] * (-focus);
+            matrix[3, 3] = 0;
+            */
+            
+            newDot.X /= newDot.W;
+            newDot.Y /= newDot.W;
+            newDot.Z /= newDot.W;
+
+            focus = place.Z;
+            newDot.X *= -100 / (focus - newDot.Z);
+            newDot.Y *= -100 / (focus - newDot.Z);
+            newDot.Z -= 10;
+            
+
+            return matrix.Apply(newDot);
         }
     }
 }
