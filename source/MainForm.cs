@@ -74,7 +74,7 @@ namespace PerlinLandscape
             int x = Convert.ToInt32(textBoxXMove.Text);
             int y = Convert.ToInt32(textBoxYMove.Text);
             int z = Convert.ToInt32(textBoxZMove.Text);
-            scene.camera.Move(x, y, z);
+            scene.camera.Move(new Vector3d(x, y, z));
             UpdateBitmap(scene);
         }
     }

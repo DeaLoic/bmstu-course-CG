@@ -13,16 +13,10 @@ namespace PerlinLandscape
         {
             int[][] Zbuf = null;
             InitBuf(ref Zbuf, bitmap.Width, bitmap.Height, int.MinValue);
-
-            Color[][] imgPar = new Color[bitmap.Width][];
-            for (int i = 0; i < bitmap.Width; i++)
-            {
-                imgPar[i] = new Color[bitmap.Height];
-            }
-
+            Matrix4x4 mainMatrix = scene.GetMainTransform();
             foreach (Object m in scene.GetObjects())
             {
-                ProcessModel(Zbuf, bitmap, m, scene.camera);
+                ProcessModel(Zbuf, bitmap, m, mainMatrix);
             }
         }
         private void InitBuf(ref int[][] buf, int w, int h, int value)
@@ -36,15 +30,15 @@ namespace PerlinLandscape
             }
         }
 
-        private void ProcessModel(int[][] buffer, Bitmap image, Object o, Camera camera)
+        private void ProcessModel(int[][] buffer, Bitmap image, Object o, Matrix4x4 transform)
         {
             Color draw;
             foreach (PollygonFour pol in o.GetPollygonsFour())
             {
-                PollygonFour polygon = new PollygonFour(camera.Proect(pol.A.Copy()),
-                                           camera.Proect(pol.B.Copy()),
-                                           camera.Proect(pol.C.Copy()),
-                                           camera.Proect(pol.D.Copy()));
+                PollygonFour polygon = new PollygonFour(transform.Apply(pol.A),
+                                                        transform.Apply(pol.B),
+                                                        transform.Apply(pol.C),
+                                                        transform.Apply(pol.D));
                 polygon.CalculatePointsInside(image.Width / 2, image.Height / 2, -image.Width / 2, -image.Height / 2);
                 draw = pol.color;
                 foreach (Dot3d point in polygon.pointsInside)//new Dot3d[] { polygon.A, polygon.B, polygon.C, polygon.D })
@@ -58,6 +52,7 @@ namespace PerlinLandscape
         {
             int h = image.Height;
             int w = image.Width;
+            /*
             Dot3d newPoint = new Dot3d(point.X / point.W + image.Width / 2, point.Y / point.W + image.Height / 2, point.Z / point.W);
             if (!(newPoint.X < 0 || newPoint.X >= w || newPoint.Y < 0 || newPoint.Y >= h))
             {
@@ -67,7 +62,8 @@ namespace PerlinLandscape
                     image.SetPixel((int)newPoint.X, (int)newPoint.Y, color);
                 }
             }
-            /*
+            */
+            
             point = new Dot3d(point.X / point.W + image.Width / 2, point.Y / point.W + image.Height / 2, point.Z / point.W);
             
             if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h ))
@@ -78,7 +74,6 @@ namespace PerlinLandscape
                     image.SetPixel((int)point.X, (int)point.Y, color);
                 }
             }
-            */
         }
     }
 }

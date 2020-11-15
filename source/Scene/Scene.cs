@@ -19,6 +19,11 @@ namespace PerlinLandscape
             objects[objects.Count() - 1] = addingObject;
         }
 
+        public Matrix4x4 GetMainTransform()
+        {
+            return camera.GetProjection() * camera.GetProjection();
+        }
+
         public Object[] GetObjects()
         {
             return this.objects;

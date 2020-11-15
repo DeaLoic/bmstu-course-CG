@@ -46,11 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GraphicMath\EAngle.cs" />
+    <Compile Include="GraphicMath\Vector3d.cs" />
+    <Compile Include="GraphicMath\Vector4d.cs" />
     <Compile Include="Objects\Camera.cs" />
     <Compile Include="DrawAlgorithm\DrawAlgorithm.cs" />
     <Compile Include="GraphicMath\MathSupport.cs" />
-    <Compile Include="GraphicMath\MatrixTransform.cs" />
-    <Compile Include="GraphicMath\Matrix.cs" />
+    <Compile Include="GraphicMath\Matrix4x4.cs" />
+    <Compile Include="GraphicMath\Matrix4x41.cs" />
     <Compile Include="GraphicMath\Converter.cs" />
     <Compile Include="Objects\Cube.cs" />
     <Compile Include="Drawer\Drawer.cs" />

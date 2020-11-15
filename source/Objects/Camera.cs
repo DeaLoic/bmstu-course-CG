@@ -8,61 +8,73 @@ namespace PerlinLandscape
 {
     class Camera
     {
-        Dot3d place;
-        double focus;
-        int angleX;
-        int angleY;
-        Dot3d rotate;
-        double scale = 0;
-        MatrixTransform transform = new MatrixTransform();
-        double xScale, yScale;
+        Vector3d place;
+        EAngle view = new EAngle(0, 0, 0);
+        double fov;
+        double aspectRatio, cameraNear, cameraFar;
 
-        public Camera(Dot3d place, int angleX = 60, int angleY = 90, int focus = 30, int widthSee = 60)
+
+        public Camera(Dot3d place, int fov = 90, double aspectRatio = (800 / 600), double cameraNear = 0.1, double cameraFar = 1000)
         {
-            this.place = place;
-            this.focus = focus;
-            this.angleX = angleX;
-            this.angleY = angleY;
-            this.yScale = 1.0 / Math.Tan(MathSupport.ToRadian(angleY / (double)2));
-            this.xScale = 1;// yScale / (800 / (double)600);
-            transform = new MatrixTransform();
-            rotate = new Dot3d(0, 0, 0);
+            this.place = new Vector3d(place);
+            this.fov = fov;
+            this.aspectRatio = aspectRatio;
+            this.cameraNear = cameraNear;
+            this.cameraFar = cameraFar;
         }
 
-        public void Move(int dx, int dy, int dz)
+        public void Move(Vector3d move)
         {
-            place.X += dx;
-            place.Y += dy;
-            place.Z += dz;
-            focus += dz;
 
-            MatrixTransform matrix = new MatrixTransform();
-            matrix.SetTransfer(dx, dy, dz);
-            transform = transform.MultiplyVinograd(matrix);
+            place += move;
         }
 
+        public Matrix4x4 GetView()
+        {
+            Vector3d vecDirection = view.ToVector();
+            Vector3d vecUp = new Vector3d(0, 1, 0);
+
+            Vector3d vecCamRight = vecDirection.Cross(vecUp).Normalized();
+            Vector3d vecCamUp = vecCamRight.Cross(vecDirection);
+
+            return new Matrix4x4(vecCamRight, vecCamUp, -vecDirection, place).InvertedTR();
+        }
+        public Matrix4x4 GetProjection()
+        {
+            double flTanThetaOver2 = Math.Tan(MathSupport.ToRadian(fov / 2));
+
+            Matrix4x4 m = new Matrix4x4();
+
+            m.Reset();
+
+            // X and Y scaling
+            m[0, 0] = 1 / flTanThetaOver2;
+            m[1, 1] = aspectRatio / flTanThetaOver2;
+
+            // Z coordinate makes z -1 when we're on the near plane and +1 on the far plane
+            m[2, 2] = (cameraNear + cameraFar) / (cameraNear - cameraFar);
+            m[3, 2] = 2 * cameraNear * cameraFar / (cameraNear - cameraFar);
+
+            // W = -1 so that we have [x y z -z], a homogenous vector that becomes [-x/z -y/z -1] after division by w.
+            m[2, 3] = 1;
+
+            // Must zero this out, the identity has it as 1.
+            m[3, 3] = 1;
+
+            return m;
+        }
         public void Rotate(int ox, int oy, int oz, Dot3d rotateCenter = null)
         {
-            if (rotateCenter == null)
-            {
-                rotateCenter = place;
-            }
-            rotate.X += ox;
-            rotate.Y += oy;
-            rotate.Z += oz;
-            MatrixTransform matrix = new MatrixTransform();
-            matrix.SetRotate(ox, oy, oz);
-            transform = transform.MultiplyVinograd(matrix);
         }
 
         public void Scale(double ko)
         {
-            scale += ko;
+            
         }
 
         public Dot3d ApplyTransform(Dot3d dot)
-        {
-            MatrixTransform matrix = new MatrixTransform();
+        {/*
+            Matrix4x4 matrix = new Matrix4x4();
             matrix.SetRotate(rotate.X, rotate.Y, rotate.Z);
             Dot3d newDot = matrix.Apply(dot);
             matrix.SetScaleGlobal(scale);
@@ -70,11 +82,13 @@ namespace PerlinLandscape
             matrix.SetTransfer(-place.X, -place.Y, -place.Z);
 
             return matrix.Apply(newDot);
+            */
+            return dot;
         }
         public Dot3d Proect(Dot3d dot)
         {
             Dot3d newDot = ApplyTransform(dot);
-            MatrixTransform matrix = new MatrixTransform();
+            Matrix4x4 matrix = new Matrix4x4();
 
             /*
             matrix[0, 0] = xScale;
@@ -101,7 +115,7 @@ namespace PerlinLandscape
             newDot.Y /= newDot.W;
             newDot.Z /= newDot.W;
 
-            focus = place.Z;
+            int focus = 2;
             newDot.X *= -100 / (focus - newDot.Z);
             newDot.Y *= -100 / (focus - newDot.Z);
             newDot.Z -= 10;

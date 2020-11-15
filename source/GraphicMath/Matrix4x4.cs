@@ -6,13 +6,50 @@ using System.Threading.Tasks;
 
 namespace PerlinLandscape
 {
-    class MatrixTransform : Matrix
+    class Matrix4x4
     {
-        public MatrixTransform() : base(4, 4) 
+        int n = 4;
+        int m = 4;
+        double[,] body;
+
+        public int N { get => n; }
+        public int M { get => m; }
+
+        public double this[int i, int j]
         {
+            get { return body[i, j]; }
+            set { body[i, j] = value; }
+        }
+        public Matrix4x4()
+        {
+            this.body = new double[this.n, this.m];
             this[0, 0] = 1;
             this[1, 1] = 1;
             this[2, 2] = 1;
+            this[3, 3] = 1;
+        }
+
+        public Matrix4x4(Vector3d vecForward, Vector3d vecUp, Vector3d vecRight, Vector3d vecPosition) : this()
+        {
+            this[0, 0] = vecForward.X;
+            this[0, 1] = vecForward.Y;
+            this[0, 2] = vecForward.Z;
+
+            this[1, 0] = vecUp.X;
+            this[1, 1] = vecUp.Y;
+            this[1, 2] = vecUp.Z;
+
+            this[2, 0] = vecRight.X;
+            this[2, 1] = vecRight.Y;
+            this[2, 2] = vecRight.Z;
+
+            this[3, 0] = vecPosition.X;
+            this[3, 1] = vecPosition.Y;
+            this[3, 2] = vecPosition.Z;
+
+            this[0, 3] = 0;
+            this[1, 3] = 0;
+            this[2, 3] = 0;
             this[3, 3] = 1;
         }
 
@@ -31,6 +68,47 @@ namespace PerlinLandscape
             this[3, 3] = 1;
         }
         
+        public Matrix4x4 InvertedTR()
+        {
+            Matrix4x4 M = new Matrix4x4();
+
+            // Create the transposed upper 3x3 matrix
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    M[i,j] = this[j,i];
+                }
+            }
+
+            Vector3d translation = new Vector3d(this[3, 0], this[3, 1], this[3, 2]);
+            translation = -(M * translation);
+            M[3, 0] = translation.X;
+            M[3, 1] = translation.Y;
+            M[3, 2] = translation.Z;
+
+            return M;
+        }
+
+        public static Matrix4x4 operator *(Matrix4x4 first, Matrix4x4 second)
+        {
+            return first.MultiplyVinograd(second);
+        }
+        public static Vector3d operator *(Matrix4x4 first, Vector3d second)
+        {
+            // [a b c x][X] 
+            // [d e f y][Y] = [aX+bY+cZ+x dX+eY+fZ+y gX+hY+iZ+z]
+            // [g h i z][Z]
+            //          [1]
+
+            Vector3d vecResult = new Vector3d(
+                first[0, 0] * second.X + first[1, 0] * second.Y + first[2, 0] * second.Z + first[3, 0],
+                first[0, 1] * second.X + first[1, 1] * second.Y + first[2, 1] * second.Z + first[3, 1],
+                first[0, 2] * second.X + first[1, 2] * second.Y + first[2, 2] * second.Z + first[3, 2]
+                );
+
+            return vecResult;
+        }
         // в k раз
         public void SetScaleGlobal(double ks)
         {
@@ -80,18 +158,18 @@ namespace PerlinLandscape
             this[1, 2] = Math.Sin(ox);
             this[2, 1] = -this[1, 2];
 
-            MatrixTransform matrix = new MatrixTransform();
+            Matrix4x4 matrix = new Matrix4x4();
             matrix[0, 0] = Math.Cos(oz);
             matrix[1, 1] = matrix[0, 0];
             matrix[0, 1] = Math.Sin(oz);
             matrix[1, 0] = -matrix[0, 1];
-            matrix = (MatrixTransform)MultiplyVinograd(matrix);
+            matrix = (Matrix4x4)MultiplyVinograd(matrix);
             this.Reset();
             this[0, 0] = Math.Cos(oy);
             this[2, 2] = this[0, 0];
             this[2, 0] = Math.Sin(oy);
             this[0, 2] = -this[2, 0];
-            matrix = (MatrixTransform)matrix.MultiplyVinograd(this);
+            matrix = (Matrix4x4)matrix.MultiplyVinograd(this);
 
             for (int i = 0; i < N; i++)
             {
@@ -104,19 +182,15 @@ namespace PerlinLandscape
 
         public Dot3d Apply(Dot3d dot)
         {
-            Matrix dotVector = new Matrix(1, 4);
-            dotVector[0, 0] = dot.X;
-            dotVector[0, 1] = dot.Y;
-            dotVector[0, 2] = dot.Z;
-            dotVector[0, 3] = dot.W;
+            Vector3d dotVector;
 
-            dotVector = dotVector.MultiplyVinograd(this);
-            return new Dot3d(dotVector[0, 0], dotVector[0, 1], dotVector[0, 2], dotVector[0, 3]);
+            dotVector = this * (new Vector3d(dot.X, dot.Y, dot.Z));
+            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z);
         }
 
-        public MatrixTransform MultiplyVinograd(MatrixTransform second)
+        public Matrix4x4 MultiplyVinograd(Matrix4x4 second)
         {
-            MatrixTransform result = new MatrixTransform();
+            Matrix4x4 result = new Matrix4x4();
             if (this.M == second.N && this.N != 0 && second.M != 0)
             {
                 int n1 = this.N;

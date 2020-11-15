@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PerlinLandscape
 {
-    class Matrix
+    /*
+    class Matrix4x4
     {
         int n;
         int m;
@@ -15,7 +16,7 @@ namespace PerlinLandscape
         public int N { get => n; }
         public int M { get => m; }
 
-        public Matrix(int n, int m)
+        public Matrix4x4(int n, int m)
         {
             this.n = n >= 0 ? n : 0;
             this.m = m >= 0 ? m : 0;
@@ -28,9 +29,9 @@ namespace PerlinLandscape
             set { body[i, j] = value; }
         }
 
-        public Matrix MultiplyVinograd(Matrix second)
+        public Matrix4x4 MultiplyVinograd(Matrix4x4 second)
         {
-            Matrix result = new Matrix(0, 0);
+            Matrix4x4 result = new Matrix4x4(0, 0);
             if (this.M == second.N && this.N != 0 && second.M != 0)
             {
                 int n1 = this.N;
@@ -38,7 +39,7 @@ namespace PerlinLandscape
                 int n2 = second.N;
                 int m2 = second.M;
 
-                result = new Matrix(n1, m2);
+                result = new Matrix4x4(n1, m2);
                 double[] mulH = new double[n1];
                 double[] mulV = new double[m2];
 
@@ -84,5 +85,7 @@ namespace PerlinLandscape
 
             return result;
         }
+        
     }
+    */
 }
