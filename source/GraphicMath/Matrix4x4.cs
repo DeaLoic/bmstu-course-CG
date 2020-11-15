@@ -96,11 +96,6 @@ namespace PerlinLandscape
         }
         public static Vector3d operator *(Vector3d first, Matrix4x4 second)
         {
-            // [a b c x][X] 
-            // [d e f y][Y] = [aX+bY+cZ+x dX+eY+fZ+y gX+hY+iZ+z]
-            // [g h i z][Z]
-            //          [1]
-
             Vector3d vecResult = new Vector3d(
                 first.X * second[0, 0] + first.Y * second[1, 0] + first.Z * second[2, 0] + first.W * second[3, 0],
                 first.X * second[0, 1] + first.Y * second[1, 1] + first.Z * second[2, 1] + first.W * second[3, 1],
@@ -186,7 +181,7 @@ namespace PerlinLandscape
             Vector3d dotVector;
 
             dotVector = (new Vector3d(dot) * this);
-            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z, dotVector.W);
+            return new Dot3d(dotVector.X / dotVector.W, dotVector.Y / dotVector.W, dotVector.Z / dotVector.W, dotVector.W / dotVector.W);
         }
 
         public Matrix4x4 MultiplyVinograd(Matrix4x4 second)

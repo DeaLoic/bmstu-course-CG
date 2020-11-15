@@ -31,10 +31,10 @@ namespace PerlinLandscape
             {
                 for (int j = 0; j < heightMap.Height - 1; j++)
                 {
-                    polygons[currentPos] = new PollygonFour(new Dot3d(i, j, heightMap[i, j]),
-                                                            new Dot3d(i, j + 1, heightMap[i, j + 1]),
-                                                            new Dot3d(i + 1, j + 1, heightMap[i + 1, j + 1]),
-                                                            new Dot3d(i + 1, j, heightMap[i + 1, j + 1]));
+                    polygons[currentPos] = new PollygonFour(new Dot3d(i, j, heightMap[i, j] * 500),
+                                                            new Dot3d(i, j + 1, heightMap[i, j + 1] * 500),
+                                                            new Dot3d(i + 1, j + 1, heightMap[i + 1, j + 1] * 500),
+                                                            new Dot3d(i + 1, j, heightMap[i + 1, j] * 500));
                     currentPos++;
                 }
             }

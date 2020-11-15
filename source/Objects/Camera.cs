@@ -10,14 +10,14 @@ namespace PerlinLandscape
     {
         public Vector3d place;
         public Vector3d eye = new Vector3d();
-        public Vector3d lookAt = new Vector3d();
+        public Vector3d lookAt = new Vector3d(0, 0, 0);
         EAngle view = new EAngle(0, 0, 0);
         double fov;
         double aspectRatio, cameraNear, cameraFar;
         double xScale;
 
 
-        public Camera(Dot3d place, int fov = 90, double aspectRatio = (800 / (double)600), double cameraNear = 1, double cameraFar = 10)
+        public Camera(Dot3d place, int fov = 90, double aspectRatio = (800 / (double)600), double cameraNear = 0.1, double cameraFar = 10000)
         {
             this.place = new Vector3d(place);
             this.fov = fov;
@@ -42,16 +42,15 @@ namespace PerlinLandscape
             Matrix4x4 m = new Matrix4x4();
 
             m.Reset();
-            m[2, 3] = -1 / 500;
-            
+            m[2, 3] = -1 / (double)100;
             /*
-            m[0, 0] = xScale;
+            m[0, 0] = xScale * 100;
             m[1, 1] = m[0, 0];
 
             m[2, 2] = (cameraFar + cameraNear) / (cameraFar - cameraNear);
             m[3, 2] = 2 * cameraNear * cameraFar / (cameraFar - cameraNear);
 
-            m[2, 3] = -1;
+            m[2, 3] = -1 / (double)100;
             m[3, 3] = 0;
             */
             return m;
@@ -60,7 +59,6 @@ namespace PerlinLandscape
         public Matrix4x4 GetLookAt()//Vector3d eye, Vector3d lookAt, Vector3d up)
         {
             Vector3d eye = place;
-            Vector3d lookAt = new Vector3d(0, 0, 0);
             Vector3d up = new Vector3d(0, 1, 0);
 
             Vector3d zaxis = (eye - lookAt).Normalized();
@@ -68,9 +66,9 @@ namespace PerlinLandscape
             Vector3d yaxis = xaxis.Cross(zaxis).Normalized();
 
             Matrix4x4 matrix = new Matrix4x4();
-            matrix[0, 0] = xaxis.X; matrix[0, 1] = xaxis.Y; matrix[0, 2] = xaxis.Z; matrix[0, 3] = 0;
-            matrix[1, 0] = yaxis.X; matrix[1, 1] = yaxis.Y; matrix[1, 2] = yaxis.Z; matrix[1, 3] = 0;
-            matrix[2, 0] = zaxis.X; matrix[2, 1] = zaxis.Y; matrix[2, 2] = zaxis.Z; matrix[2, 3] = 0;
+            matrix[0, 0] = xaxis.X; matrix[0, 1] = xaxis.Y; matrix[0, 2] = xaxis.Z; matrix[0, 3] = 0;//-xaxis.DotProduct(eye);
+            matrix[1, 0] = yaxis.X; matrix[1, 1] = yaxis.Y; matrix[1, 2] = yaxis.Z; matrix[1, 3] = 0;//-yaxis.DotProduct(eye);
+            matrix[2, 0] = zaxis.X; matrix[2, 1] = zaxis.Y; matrix[2, 2] = zaxis.Z; matrix[2, 3] = 0;// -zaxis.DotProduct(eye);
             matrix[3, 0] = 0;         matrix[3, 1] = 0;         matrix[3, 2] = 0;         matrix[3, 3] = 1;
 
             return matrix;

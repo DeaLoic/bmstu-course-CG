@@ -49,6 +49,7 @@
     <Compile Include="GraphicMath\EAngle.cs" />
     <Compile Include="GraphicMath\Vector3d.cs" />
     <Compile Include="GraphicMath\Vector4d.cs" />
+    <Compile Include="HeightMap\Noize.cs" />
     <Compile Include="Objects\Camera.cs" />
     <Compile Include="DrawAlgorithm\DrawAlgorithm.cs" />
     <Compile Include="GraphicMath\MathSupport.cs" />

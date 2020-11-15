@@ -1,13 +1,14 @@
-﻿using System;
+﻿using PerlinLandscape;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cSharpTry
+namespace PerlinLandscape
 {
-    class PerlinNoize
+    class PerlinNoize : Noize
     { 
         double persistanсe = 0.5;
         int countOfOctaves = 7;
@@ -27,13 +28,13 @@ namespace cSharpTry
             { 997169939, 842027887, 423882827 }
         };
 
-        public PerlinNoize(double per, int oct, int ind)
+        public PerlinNoize(double per = 0.5, int oct = 7, int ind = 3)
         {
             persistanсe = per;
             countOfOctaves = oct;
             primeIndex = ind;
         }
-        public double GetValue(double x, double y)
+        public override double Generate(double x, double y)
         {
             double total = 0,
                 frequency = Math.Pow(2, countOfOctaves),

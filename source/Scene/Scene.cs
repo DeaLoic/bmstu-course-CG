@@ -23,8 +23,8 @@ namespace PerlinLandscape
         public Matrix4x4 GetMainTransform()
         {
             Matrix4x4 transform = new Matrix4x4();
-            transform.SetScaleGlobal(4);
-            return camera.GetLookAt();// * camera.GetProjection() * transform;
+            transform.SetScaleGlobal(20);
+            return camera.GetLookAt() * transform;// * camera.GetProjection();// * transform;
         }
 
         public Object[] GetObjects()

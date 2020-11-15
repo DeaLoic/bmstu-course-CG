@@ -17,6 +17,36 @@ namespace PerlinLandscape
             foreach (Object m in scene.GetObjects())
             {
                 ProcessModel(Zbuf, bitmap, m, mainMatrix);
+                continue;
+                var a = m.GetPollygonsFour()[4];
+                var b = m.GetPollygonsFour()[5];
+
+                DrawLine(bitmap, mainMatrix.Apply(a.A), mainMatrix.Apply(a.B));
+                DrawLine(bitmap, mainMatrix.Apply(a.C), mainMatrix.Apply(a.B));
+                DrawLine(bitmap, mainMatrix.Apply(a.C), mainMatrix.Apply(a.D));
+                DrawLine(bitmap, mainMatrix.Apply(a.A), mainMatrix.Apply(a.D));
+                DrawLine(bitmap, mainMatrix.Apply(b.A), mainMatrix.Apply(b.B));
+                DrawLine(bitmap, mainMatrix.Apply(b.C), mainMatrix.Apply(b.B));
+                DrawLine(bitmap, mainMatrix.Apply(b.C), mainMatrix.Apply(b.D));
+                DrawLine(bitmap, mainMatrix.Apply(b.A), mainMatrix.Apply(b.D));
+                DrawLine(bitmap, mainMatrix.Apply(a.A), mainMatrix.Apply(b.C));
+                DrawLine(bitmap, mainMatrix.Apply(a.B), mainMatrix.Apply(b.B));
+                DrawLine(bitmap, mainMatrix.Apply(a.C), mainMatrix.Apply(b.A));
+                DrawLine(bitmap, mainMatrix.Apply(a.D), mainMatrix.Apply(b.D));
+            }
+        }
+        private void DrawLine(Bitmap bitmap, Dot3d first, Dot3d second)
+        {
+            first.X += 400;
+            second.X += 400;
+            first.Y += 300;
+            second.Y += 300;
+
+            if (!(first.X < 0 || first.X >= 800 || first.Y < 0 || first.Y >= 600 || double.IsNaN(first.X) || double.IsNaN(first.Y)) &&
+                !(second.X < 0 || second.X >= 800 || second.Y < 0 || second.Y >= 600 || double.IsNaN(second.X) || double.IsNaN(second.Y)))
+            {
+                Graphics g = Graphics.FromImage(bitmap);
+                g.DrawLine(new Pen(Color.Black), (float)first.X, (float)first.Y, (float)second.X, (float)second.Y);
             }
         }
         private void InitBuf(ref int[][] buf, int w, int h, int value)
@@ -44,7 +74,7 @@ namespace PerlinLandscape
                 draw = pol.color;
                 foreach (Dot3d point in polygon.pointsInside)//new Dot3d[] { polygon.A, polygon.B, polygon.C, polygon.D })
                 {
-                    ProcessPoint(buffer, image, transform.Apply(point), draw);
+                    ProcessPoint(buffer, image, point, draw);
                 }
             }
         }

@@ -24,12 +24,12 @@ namespace PerlinLandscape
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            HeightMap newHeightMap = new HeightMap(10, 10);
+            HeightMap newHeightMap = new HeightMap(new PerlinNoize(), 10, 10);
             newHeightMap.Generate();
 
-            //Landscape landscape = new Landscape(newHeightMap);
-            //scene.AddObject(landscape);
-            scene.AddObject(new Cube(100));
+            Landscape landscape = new Landscape(newHeightMap);
+            scene.AddObject(landscape);
+            //scene.AddObject(new Cube(100));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
