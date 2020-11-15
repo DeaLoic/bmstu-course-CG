@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace PerlinLandscape
     class Scene
     {
         Object[] objects = new Object[0];
-        public Camera camera = new Camera(new Dot3d(0, 0, 0));
+        public Camera camera = new Camera(new Dot3d(0, 0, 10));
 
         public Scene(){}
 
@@ -21,7 +22,9 @@ namespace PerlinLandscape
 
         public Matrix4x4 GetMainTransform()
         {
-            return camera.GetProjection() * camera.GetProjection();
+            Matrix4x4 transform = new Matrix4x4();
+            transform.SetScaleGlobal(4);
+            return camera.GetLookAt();// * camera.GetProjection() * transform;
         }
 
         public Object[] GetObjects()

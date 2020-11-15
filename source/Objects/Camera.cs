@@ -8,25 +8,23 @@ namespace PerlinLandscape
 {
     class Camera
     {
-        Vector3d place;
+        public Vector3d place;
+        public Vector3d eye = new Vector3d();
+        public Vector3d lookAt = new Vector3d();
         EAngle view = new EAngle(0, 0, 0);
         double fov;
         double aspectRatio, cameraNear, cameraFar;
+        double xScale;
 
 
-        public Camera(Dot3d place, int fov = 90, double aspectRatio = (800 / 600), double cameraNear = 0.1, double cameraFar = 1000)
+        public Camera(Dot3d place, int fov = 90, double aspectRatio = (800 / (double)600), double cameraNear = 1, double cameraFar = 10)
         {
             this.place = new Vector3d(place);
             this.fov = fov;
             this.aspectRatio = aspectRatio;
             this.cameraNear = cameraNear;
             this.cameraFar = cameraFar;
-        }
-
-        public void Move(Vector3d move)
-        {
-
-            place += move;
+            this.xScale = 1 / Math.Tan(MathSupport.ToRadian(fov / 2));
         }
 
         public Matrix4x4 GetView()
@@ -37,34 +35,53 @@ namespace PerlinLandscape
             Vector3d vecCamRight = vecDirection.Cross(vecUp).Normalized();
             Vector3d vecCamUp = vecCamRight.Cross(vecDirection);
 
-            return new Matrix4x4(vecCamRight, vecCamUp, -vecDirection, place).InvertedTR();
+            return new Matrix4x4(vecCamRight, vecCamUp, vecDirection, place);
         }
         public Matrix4x4 GetProjection()
         {
-            double flTanThetaOver2 = Math.Tan(MathSupport.ToRadian(fov / 2));
-
             Matrix4x4 m = new Matrix4x4();
 
             m.Reset();
+            m[2, 3] = -1 / 500;
+            
+            /*
+            m[0, 0] = xScale;
+            m[1, 1] = m[0, 0];
 
-            // X and Y scaling
-            m[0, 0] = 1 / flTanThetaOver2;
-            m[1, 1] = aspectRatio / flTanThetaOver2;
+            m[2, 2] = (cameraFar + cameraNear) / (cameraFar - cameraNear);
+            m[3, 2] = 2 * cameraNear * cameraFar / (cameraFar - cameraNear);
 
-            // Z coordinate makes z -1 when we're on the near plane and +1 on the far plane
-            m[2, 2] = (cameraNear + cameraFar) / (cameraNear - cameraFar);
-            m[3, 2] = 2 * cameraNear * cameraFar / (cameraNear - cameraFar);
-
-            // W = -1 so that we have [x y z -z], a homogenous vector that becomes [-x/z -y/z -1] after division by w.
-            m[2, 3] = 1;
-
-            // Must zero this out, the identity has it as 1.
-            m[3, 3] = 1;
-
+            m[2, 3] = -1;
+            m[3, 3] = 0;
+            */
             return m;
+        }
+
+        public Matrix4x4 GetLookAt()//Vector3d eye, Vector3d lookAt, Vector3d up)
+        {
+            Vector3d eye = place;
+            Vector3d lookAt = new Vector3d(0, 0, 0);
+            Vector3d up = new Vector3d(0, 1, 0);
+
+            Vector3d zaxis = (eye - lookAt).Normalized();
+            Vector3d xaxis = up.Cross(zaxis).Normalized();
+            Vector3d yaxis = xaxis.Cross(zaxis).Normalized();
+
+            Matrix4x4 matrix = new Matrix4x4();
+            matrix[0, 0] = xaxis.X; matrix[0, 1] = xaxis.Y; matrix[0, 2] = xaxis.Z; matrix[0, 3] = 0;
+            matrix[1, 0] = yaxis.X; matrix[1, 1] = yaxis.Y; matrix[1, 2] = yaxis.Z; matrix[1, 3] = 0;
+            matrix[2, 0] = zaxis.X; matrix[2, 1] = zaxis.Y; matrix[2, 2] = zaxis.Z; matrix[2, 3] = 0;
+            matrix[3, 0] = 0;         matrix[3, 1] = 0;         matrix[3, 2] = 0;         matrix[3, 3] = 1;
+
+            return matrix;
+        }
+    public void Move(Vector3d move)
+        {
+            place += move;
         }
         public void Rotate(int ox, int oy, int oz, Dot3d rotateCenter = null)
         {
+            view.AddDegrees(ox, oy, oz);
         }
 
         public void Scale(double ko)

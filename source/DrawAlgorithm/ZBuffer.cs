@@ -39,11 +39,12 @@ namespace PerlinLandscape
                                                         transform.Apply(pol.B),
                                                         transform.Apply(pol.C),
                                                         transform.Apply(pol.D));
+
                 polygon.CalculatePointsInside(image.Width / 2, image.Height / 2, -image.Width / 2, -image.Height / 2);
                 draw = pol.color;
                 foreach (Dot3d point in polygon.pointsInside)//new Dot3d[] { polygon.A, polygon.B, polygon.C, polygon.D })
                 {
-                    ProcessPoint(buffer, image, point, draw);
+                    ProcessPoint(buffer, image, transform.Apply(point), draw);
                 }
             }
         }
@@ -66,9 +67,9 @@ namespace PerlinLandscape
             
             point = new Dot3d(point.X / point.W + image.Width / 2, point.Y / point.W + image.Height / 2, point.Z / point.W);
             
-            if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h ))
+            if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h || double.IsNaN(point.X) || double.IsNaN(point.Y)))
             {
-                if (point.Z > buffer[(int)point.Y][(int)point.X])
+                if (point.Z >= buffer[(int)point.Y][(int)point.X])
                 {
                     buffer[(int)point.Y][(int)point.X] = (int)point.Z;
                     image.SetPixel((int)point.X, (int)point.Y, color);

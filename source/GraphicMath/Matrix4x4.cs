@@ -82,7 +82,7 @@ namespace PerlinLandscape
             }
 
             Vector3d translation = new Vector3d(this[3, 0], this[3, 1], this[3, 2]);
-            translation = -(M * translation);
+            translation = -(translation * M);
             M[3, 0] = translation.X;
             M[3, 1] = translation.Y;
             M[3, 2] = translation.Z;
@@ -94,7 +94,7 @@ namespace PerlinLandscape
         {
             return first.MultiplyVinograd(second);
         }
-        public static Vector3d operator *(Matrix4x4 first, Vector3d second)
+        public static Vector3d operator *(Vector3d first, Matrix4x4 second)
         {
             // [a b c x][X] 
             // [d e f y][Y] = [aX+bY+cZ+x dX+eY+fZ+y gX+hY+iZ+z]
@@ -102,9 +102,10 @@ namespace PerlinLandscape
             //          [1]
 
             Vector3d vecResult = new Vector3d(
-                first[0, 0] * second.X + first[1, 0] * second.Y + first[2, 0] * second.Z + first[3, 0],
-                first[0, 1] * second.X + first[1, 1] * second.Y + first[2, 1] * second.Z + first[3, 1],
-                first[0, 2] * second.X + first[1, 2] * second.Y + first[2, 2] * second.Z + first[3, 2]
+                first.X * second[0, 0] + first.Y * second[1, 0] + first.Z * second[2, 0] + first.W * second[3, 0],
+                first.X * second[0, 1] + first.Y * second[1, 1] + first.Z * second[2, 1] + first.W * second[3, 1],
+                first.X * second[0, 2] + first.Y * second[1, 2] + first.Z * second[2, 2] + first.W * second[3, 2],
+                first.X * second[0, 3] + first.Y * second[1, 3] + first.Z * second[2, 3] + first.W * second[3, 3]
                 );
 
             return vecResult;
@@ -184,8 +185,8 @@ namespace PerlinLandscape
         {
             Vector3d dotVector;
 
-            dotVector = this * (new Vector3d(dot.X, dot.Y, dot.Z));
-            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z);
+            dotVector = (new Vector3d(dot) * this);
+            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z, dotVector.W);
         }
 
         public Matrix4x4 MultiplyVinograd(Matrix4x4 second)
