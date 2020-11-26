@@ -14,7 +14,7 @@ namespace PerlinLandscape
         Color color;
 
         public double Diffuse { get => diffuse; }
-        public double Specular { get => diffuse; }
+        public double Specular { get => specular; }
 
         public Material(double diffuseCoeff, double specularCoeff)
         {

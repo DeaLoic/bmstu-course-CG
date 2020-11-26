@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace PerlinLandscape
     {
         Object[] objects = new Object[0];
         public Camera camera = new Camera(new Dot3d(0, 0, 350));
-        public LightSource lightSource = new LightSource(new Dot3d(), new Vector3d(1, 0, 0));
+        public LightSource lightSource = new LightSource(new Dot3d(), new Vector3d(0, 0, -1), Color.White);
 
         public Scene(){}
 
@@ -39,7 +40,7 @@ namespace PerlinLandscape
             }
             perspective = camera.GetProjectionSimple();
 
-            return view * perspective;
+            return view;
         }
 
         public ViewFrustum GetCameraFrustum()

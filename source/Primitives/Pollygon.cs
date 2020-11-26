@@ -12,6 +12,7 @@ namespace PerlinLandscape
         protected Vector3d normal = new Vector3d();
 
         public int Size { get => dots.Length; }
+        public Dot3d this[int a] { get => dots[a]; }
         public Pollygon(Dot3d[] dots)
         {
             if (dots != null)

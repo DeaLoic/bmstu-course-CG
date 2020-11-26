@@ -15,9 +15,10 @@ namespace PerlinLandscape
             InitBuf(ref Zbuf, bitmap.Width, bitmap.Height, int.MinValue);
             Matrix4x4 mainMatrix = scene.GetMainTransform(typeView);
             ViewFrustum viewFrustum = scene.GetCameraFrustum();
+            Shader shader = new Shader(scene.lightSource, scene.camera.place.ToDot());
             foreach (Object m in scene.GetObjects())
             {
-                ProcessModel(Zbuf, bitmap, m, mainMatrix, viewFrustum);
+                ProcessModel(Zbuf, bitmap, m, mainMatrix, viewFrustum, shader);
             }
         }
 
@@ -32,7 +33,7 @@ namespace PerlinLandscape
             }
         }
 
-        private void ProcessModel(int[][] buffer, Bitmap image, Object o, Matrix4x4 transform, ViewFrustum frustum)
+        private void ProcessModel(int[][] buffer, Bitmap image, Object o, Matrix4x4 transform, ViewFrustum frustum, Shader shader)
         {
             Color draw;
             foreach (PollygonDraw pol in o.GetPollygonsDraw())
@@ -41,7 +42,7 @@ namespace PerlinLandscape
                 polygon.Transform(transform);
                 polygon.Normilize();
                 polygon.CalculatePointsInside(image.Width / 2, image.Height / 2, -image.Width / 2, -image.Height / 2);
-                draw = pol.color;
+                draw = shader.GetColorSimple(pol);
                 foreach (Dot3d point in polygon.pointsInside)
                 {
                     ProcessPoint(buffer, image, point, draw);

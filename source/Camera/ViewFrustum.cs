@@ -23,7 +23,7 @@ namespace PerlinLandscape
             double tanWidth = Math.Tan(MathSupport.ToRadian(fovWidth / (double)2));
             double tanHeight = Math.Tan(MathSupport.ToRadian(fovHeight / (double)2));
             lookVector = lookVector.Normalized();
-            if (lookVector.Lenght == 0)
+            if (lookVector.Length == 0)
             {
                 lookVector = new Vector3d(0, 0, -1);
             }

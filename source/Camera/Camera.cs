@@ -92,7 +92,7 @@ namespace PerlinLandscape
         public Matrix4x4 GetLookAt()//Vector3d eye, Vector3d lookAt, Vector3d up)
         {
             Vector3d zaxis = (lookAt - place).Normalized();
-            if (zaxis.Lenght == 0)
+            if (zaxis.Length == 0)
             {
                 zaxis = new Vector3d(0, 0, -1);
             }

@@ -12,7 +12,7 @@ namespace PerlinLandscape
         int averageHeight;
         public List<Dot3d> pointsInside;
         public Color color;
-        Material material = new Material(1, 1);
+        Material material = new Material(0.5, 0.1);
         public Material Material { get => material; }
 
         public PollygonDraw(Dot3d[] dots, Material material = null) : base(dots)

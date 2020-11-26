@@ -17,8 +17,8 @@ namespace PerlinLandscape
         double w;
         public double W { get => w; }
 
-        double lenght;
-        public double Lenght { get => lenght; }
+        double length;
+        public double Length { get => length; }
 
         public Vector3d(Dot3d dot)
         {
@@ -40,18 +40,18 @@ namespace PerlinLandscape
 
         private void CountLenght()
         {
-            lenght = Math.Sqrt(x * x + y * y + z * z);
+            length = Math.Sqrt(x * x + y * y + z * z);
         }
         public Vector3d Normalized()
         {
-            return this / (this.Lenght > 0 ? this.Lenght : 1);
+            return this / (this.Length > 0 ? this.Length : 1);
         }
         public void Normalize()
         {
-            lenght = Lenght == 0 ? 1 : Lenght;
-            this.x = x / Lenght;
-            this.y = y / Lenght;
-            this.z = z / Lenght;
+            length = Length == 0 ? 1 : Length;
+            this.x = x / Length;
+            this.y = y / Length;
+            this.z = z / Length;
             this.w = 1;
             CountLenght();
         }
