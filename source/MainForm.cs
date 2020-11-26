@@ -14,7 +14,11 @@ namespace PerlinLandscape
     {
         Bitmap bitmap;
         Scene scene;
+        int typeView = 0;
 
+        bool isMoving = false;
+        Point firstMove;
+        double cameraSpeed = 10;
         public MainForm()
         {
             InitializeComponent();
@@ -24,12 +28,12 @@ namespace PerlinLandscape
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            HeightMap newHeightMap = new HeightMap(new PerlinNoize(), 10, 10);
+            HeightMap newHeightMap = new HeightMap(new PerlinNoize(), 300, 300);
             newHeightMap.Generate();
 
-            Landscape landscape = new Landscape(newHeightMap);
+            Landscape landscape = new Landscape(newHeightMap, 500, 20);
             scene.AddObject(landscape);
-            //scene.AddObject(new Cube(100));
+            //scene.AddObject(new Cube(5));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
@@ -38,19 +42,19 @@ namespace PerlinLandscape
         {
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
 
-            new Drawer(new ZBuffer()).Draw(bitmap, scene);
+            new Drawer(new ZBuffer()).Draw(bitmap, scene, typeView);
             mainCanvas.Image = bitmap;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            scene.camera.Rotate(0, 10, 0);
+            typeView++;
+            typeView %= 3;
             UpdateBitmap(scene);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
 
@@ -71,11 +75,28 @@ namespace PerlinLandscape
 
         private void buttonMove_Click(object sender, EventArgs e)
         {
-            int x = Convert.ToInt32(textBoxXMove.Text);
-            int y = Convert.ToInt32(textBoxYMove.Text);
-            int z = Convert.ToInt32(textBoxZMove.Text);
+            double x = Convert.ToDouble(textBoxXMove.Text.Replace('.',','));
+            double y = Convert.ToDouble(textBoxYMove.Text.Replace('.', ','));
+            double z = Convert.ToDouble(textBoxZMove.Text.Replace('.', ','));
             scene.camera.Move(new Vector3d(x, y, z));
             UpdateBitmap(scene);
+        }
+
+        private void mainCanvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            firstMove = e.Location;
+            isMoving = true;
+        }
+
+        private void mainCanvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isMoving)
+            {
+                Point lastMove = e.Location;
+                isMoving = false;
+                scene.camera.Rotate((lastMove.X - firstMove.X) / cameraSpeed, (lastMove.Y - firstMove.Y) / cameraSpeed, 0);
+                UpdateBitmap(scene);
+            }
         }
     }
 }

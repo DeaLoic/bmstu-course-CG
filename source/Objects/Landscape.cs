@@ -9,32 +9,37 @@ namespace PerlinLandscape
     class Landscape : Object
     {
         HeightMap heightMap;
-        PollygonFour[] polygons;
+        PollygonDraw[] polygons;
 
-        public Landscape(HeightMap map)
+        public Landscape(HeightMap map, int maxHeightDelta = 500, int step = 4)
         {
             polygons = new PollygonFour[0];
             heightMap = map;
-            FormPollygons();
+            FormPollygons(step, maxHeightDelta);
         }
 
-        public override PollygonFour[] GetPollygonsFour()
+        public override PollygonDraw[] GetPollygonsDraw()
         {
             return polygons;
         }
 
-        private void FormPollygons()
+        private void FormPollygons(int step, double maxHeightDelta)
         {
-            polygons = new PollygonFour[(heightMap.Width - 1) * (heightMap.Height - 1)];
+            polygons = new PollygonFour[((heightMap.Width - 1) / step) * ((heightMap.Height - 1) / step)];
             int currentPos = 0;
-            for (int i = 0; i < heightMap.Width - 1; i++)
+            int xOffset = -heightMap.Width / 2;
+            int yOffsetZero = -heightMap.Height / 2;
+            int yOffset;
+            for (int i = 0; i < (heightMap.Width - step); i += step, xOffset += step)
             {
-                for (int j = 0; j < heightMap.Height - 1; j++)
+                yOffset = yOffsetZero;
+                for (int j = 0; j < (heightMap.Height - step); j += step, yOffset += step)
                 {
-                    polygons[currentPos] = new PollygonFour(new Dot3d(i, j, heightMap[i, j] * 500),
-                                                            new Dot3d(i, j + 1, heightMap[i, j + 1] * 500),
-                                                            new Dot3d(i + 1, j + 1, heightMap[i + 1, j + 1] * 500),
-                                                            new Dot3d(i + 1, j, heightMap[i + 1, j] * 500));
+
+                    polygons[currentPos] = new PollygonFour(new Dot3d(xOffset, yOffset, heightMap[i, j] * maxHeightDelta),
+                                                            new Dot3d(xOffset, yOffset + step, heightMap[i, j + step] * maxHeightDelta),
+                                                            new Dot3d(xOffset + step, yOffset + step, heightMap[i + step, j + step] * maxHeightDelta),
+                                                            new Dot3d(xOffset + step, yOffset, heightMap[i + step, j] * maxHeightDelta));
                     currentPos++;
                 }
             }

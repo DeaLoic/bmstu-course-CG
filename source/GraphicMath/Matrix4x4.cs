@@ -83,9 +83,9 @@ namespace PerlinLandscape
 
             Vector3d translation = new Vector3d(this[3, 0], this[3, 1], this[3, 2]);
             translation = -(translation * M);
-            M[3, 0] = translation.X;
-            M[3, 1] = translation.Y;
-            M[3, 2] = translation.Z;
+            M[0, 3] = translation.X;
+            M[1, 3] = translation.Y;
+            M[2, 3] = translation.Z;
 
             return M;
         }
@@ -181,7 +181,7 @@ namespace PerlinLandscape
             Vector3d dotVector;
 
             dotVector = (new Vector3d(dot) * this);
-            return new Dot3d(dotVector.X / dotVector.W, dotVector.Y / dotVector.W, dotVector.Z / dotVector.W, dotVector.W / dotVector.W);
+            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z, dotVector.W);
         }
 
         public Matrix4x4 MultiplyVinograd(Matrix4x4 second)

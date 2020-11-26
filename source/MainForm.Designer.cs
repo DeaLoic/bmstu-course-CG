@@ -52,12 +52,14 @@
             // 
             // mainCanvas
             // 
-            this.mainCanvas.BackColor = System.Drawing.Color.White;
+            this.mainCanvas.BackColor = System.Drawing.Color.Gray;
             this.mainCanvas.Location = new System.Drawing.Point(2, 3);
             this.mainCanvas.Name = "mainCanvas";
             this.mainCanvas.Size = new System.Drawing.Size(800, 600);
             this.mainCanvas.TabIndex = 0;
             this.mainCanvas.TabStop = false;
+            this.mainCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseDown);
+            this.mainCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseUp);
             // 
             // generateButton
             // 
@@ -225,6 +227,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(940, 643);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);

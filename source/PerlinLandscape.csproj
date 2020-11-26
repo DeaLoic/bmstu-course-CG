@@ -46,11 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera\ViewFrustum.cs" />
+    <Compile Include="Cutter\SazerlandHojment.cs" />
     <Compile Include="GraphicMath\EAngle.cs" />
     <Compile Include="GraphicMath\Vector3d.cs" />
     <Compile Include="GraphicMath\Vector4d.cs" />
     <Compile Include="HeightMap\Noize.cs" />
-    <Compile Include="Objects\Camera.cs" />
+    <Compile Include="Camera\Camera.cs" />
     <Compile Include="DrawAlgorithm\DrawAlgorithm.cs" />
     <Compile Include="GraphicMath\MathSupport.cs" />
     <Compile Include="GraphicMath\Matrix4x4.cs" />
@@ -59,8 +61,11 @@
     <Compile Include="Objects\Cube.cs" />
     <Compile Include="Drawer\Drawer.cs" />
     <Compile Include="GraphicMath\Transform.cs" />
+    <Compile Include="Objects\Cutter.cs" />
+    <Compile Include="Primitives\Pollygon.cs" />
+    <Compile Include="Primitives\PollygonDraw.cs" />
     <Compile Include="Primitives\Dot3d.cs" />
-    <Compile Include="Objects\PollygonFour.cs" />
+    <Compile Include="Primitives\PollygonFour.cs" />
     <Compile Include="Objects\Object.cs" />
     <Compile Include="Objects\Landscape.cs" />
     <Compile Include="Scene\Scene.cs" />

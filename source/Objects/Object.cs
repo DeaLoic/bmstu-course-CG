@@ -15,6 +15,6 @@ namespace PerlinLandscape
         {
             this.isVisible = isVisible;
         }
-        public abstract PollygonFour[] GetPollygonsFour();
+        public abstract PollygonDraw[] GetPollygonsDraw();
     }
 }

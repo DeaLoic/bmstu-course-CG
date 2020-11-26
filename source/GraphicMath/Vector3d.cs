@@ -16,28 +16,48 @@ namespace PerlinLandscape
         public double Z { get => z; }
         double w;
         public double W { get => w; }
+
+        double lenght;
+        public double Lenght { get => lenght; }
+
         public Vector3d(Dot3d dot)
         {
             x = dot.X;
             y = dot.Y;
             z = dot.Z;
             w = dot.W;
+            CountLenght();
         }
 
-        public Vector3d(double x = 0, double y = 0, double z = 0, double w = 0)
+        public Vector3d(double x = 0, double y = 0, double z = 0, double w = 1)
         {
             this.x = x;
             this.y = y;
             this.z = z;
             this.w = w;
+            CountLenght();
         }
-        public double Lenght()
+
+        private void CountLenght()
         {
-            return Math.Sqrt(x * x + y * y + z * z);
+            lenght = Math.Sqrt(x * x + y * y + z * z);
         }
         public Vector3d Normalized()
         {
-            return this / this.Lenght();
+            return this / (this.Lenght > 0 ? this.Lenght : 1);
+        }
+        public void Normalize()
+        {
+            lenght = Lenght == 0 ? 1 : Lenght;
+            this.x = x / Lenght;
+            this.y = y / Lenght;
+            this.z = z / Lenght;
+            this.w = 1;
+            CountLenght();
+        }
+        public Vector3d Copy()
+        {
+            return new Vector3d(x, y, z, w);
         }
 
         public double DotProduct(Vector3d first)
@@ -49,6 +69,10 @@ namespace PerlinLandscape
             return new Vector3d(y * first.z - z * first.y, z * first.x - x * first.z, x * first.y - y * first.x);
         }
 
+        public Dot3d ToDot()
+        {
+            return new Dot3d(X, Y, Z, W);
+        }
         public static Vector3d operator +(Vector3d first, Vector3d second)
         {
             return new Vector3d(first.x + second.x, first.y + second.y, first.z + second.z, first.w);
@@ -63,20 +87,21 @@ namespace PerlinLandscape
         }
         public static Vector3d operator /(Vector3d first, double s)
         {
+            s = s != 0 ? s : 1;
             return new Vector3d(first.x / s, first.y / s, first.z / s, first.w);
         }
         public static Vector3d operator -(Vector3d first)
         {
-            return new Vector3d(-first.x, -first.y, -first.z, -first.w);
+            return new Vector3d(-first.x, -first.y, -first.z, first.w);
         }
 
         public static Dot3d operator +(Dot3d first, Vector3d second)
         {
-            return new Dot3d(first.X + second.x, first.Y + second.y, first.Z + second.z, first.W + second.w);
+            return new Dot3d(first.X + second.x, first.Y + second.y, first.Z + second.z, second.w);
         }
         public static Dot3d operator -(Dot3d first, Vector3d second)
         {
-            return new Dot3d(first.X - second.x, first.Y - second.y, first.Z - second.z, first.W - second.w);
+            return new Dot3d(first.X - second.x, first.Y - second.y, first.Z - second.z, second.w);
         }
     }
 }

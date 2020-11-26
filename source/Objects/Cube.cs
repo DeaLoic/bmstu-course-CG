@@ -11,7 +11,7 @@ namespace PerlinLandscape
     {
         Dot3d A = new Dot3d();
 
-        PollygonFour[] polygons;
+        PollygonDraw[] polygons;
         public Cube(int size)
         {
             A.X = size;
@@ -19,14 +19,20 @@ namespace PerlinLandscape
             A.Z = size;
             polygons = new PollygonFour[6];
             polygons[0] = (new PollygonFour(A, new Dot3d(A.X, A.Y, 0), new Dot3d(A.X, 0, 0), new Dot3d(A.X, 0, A.Z)));
+            polygons[0].color = Color.Red;
             polygons[1] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(0, A.Y, 0), new Dot3d(0, A.Y, A.Z), new Dot3d(0, 0, A.Z)));
+            polygons[1].color = Color.Red;
             polygons[2] = (new PollygonFour(A, new Dot3d(0, A.Y, A.Z), new Dot3d(0, 0, A.Z), new Dot3d(A.X, 0, A.Z)));
+            polygons[2].color = Color.Black;
             polygons[3] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(A.X, 0, 0), new Dot3d(A.X, A.Y, 0), new Dot3d(0, A.Y, 0)));
+            polygons[3].color = Color.Black;
             polygons[4] = (new PollygonFour(A, new Dot3d(0, A.Y, A.Z), new Dot3d(0, A.Y, 0), new Dot3d(A.X, A.Y, 0)));
+            polygons[4].color = Color.DeepPink;
             polygons[5] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(0, 0, A.Z), new Dot3d(A.X, 0, A.Z), new Dot3d(A.X, 0, 0)));
+            polygons[5].color = Color.DeepPink;
         }
 
-        public override PollygonFour[] GetPollygonsFour()
+        public override PollygonDraw[] GetPollygonsDraw()
         {
             return polygons;
         }
