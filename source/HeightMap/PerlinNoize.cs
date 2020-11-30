@@ -12,7 +12,7 @@ namespace PerlinLandscape
     { 
         double persistanсe = 0.5;
         int countOfOctaves = 7;
-        int primeIndex = 3;
+        int primeIndex = 1;
         int maxPrimeIndex = 10;
         int[,] primes =
         {
@@ -46,7 +46,7 @@ namespace PerlinLandscape
                 total += InterpolatedNoise((primeIndex + i) % maxPrimeIndex,
                     x / frequency, y / frequency) * amplitude;
             }
-            return total / frequency;
+            return Normalize(total / frequency);
             //return Math.Abs(total / frequency);
         }
 
@@ -68,7 +68,7 @@ namespace PerlinLandscape
 
         double Interpolate(double a, double b, double x)
         {
-            double ft = x * 3.1415927,
+            double ft = x * Math.PI,
                 f = (1 - Math.Cos(ft)) * 0.5;
             return a * (1 - f) + b * f;
         }
@@ -92,6 +92,11 @@ namespace PerlinLandscape
             int c = primes[index, 2];
             int t = (n * (n * n * a + b) + c) & 0x7fffffff;
             return 1.0 - (double)(t) / 1073741824.0;
+        }
+
+        private double Normalize(double x)
+        {
+            return (x + 1) / 2;
         }
 
     }

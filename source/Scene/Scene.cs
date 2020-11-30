@@ -11,7 +11,7 @@ namespace PerlinLandscape
     class Scene
     {
         Object[] objects = new Object[0];
-        public Camera camera = new Camera(new Dot3d(0, 0, 350));
+        public Camera camera = new Camera(new Dot3d(0, 0, -350));
         public LightSource lightSource = new LightSource(new Dot3d(), new Vector3d(0, 0, -1), Color.White);
 
         public Scene(){}
@@ -22,22 +22,12 @@ namespace PerlinLandscape
             objects[objects.Count() - 1] = addingObject;
         }
 
-        public Matrix4x4 GetMainTransform(int typeView = 0)
+        public Matrix4x4 GetMainTransform()
         {
             Matrix4x4 view;
             Matrix4x4 perspective;
-            switch (typeView)
-            {
-                case 2:
-                    view = camera.GetTransformToView();
-                    break;
-                case 1:
-                    view = camera.GetLookAt();
-                    break;
-                default:
-                    view = camera.GetView();
-                    break;
-            }
+
+            view = camera.GetLookAt();
             perspective = camera.GetProjectionSimple();
 
             return view * perspective;
@@ -50,6 +40,11 @@ namespace PerlinLandscape
         public Object[] GetObjects()
         {
             return this.objects;
+        }
+
+        public void DeleteObjects()
+        {
+            Array.Resize(ref objects, 0);
         }
     }
 }

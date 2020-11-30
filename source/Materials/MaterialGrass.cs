@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
-namespace PerlinLandscape.Materials
+namespace PerlinLandscape
 {
-    class MaterialGrass
+    class MaterialGrass : Material
     {
+        public MaterialGrass() : base(0.8, 0.3)
+        {
+            colorReflect = ReflectFromColor(Color.Green);
+        }
     }
 }

@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace PerlinLandscape.Materials
 {
-    class WaterMaterial
+    class WaterMaterial : Material
     {
+        public WaterMaterial() : base(0.4, 0.5)
+        {
+            colorReflect = ReflectFromColor(Color.DarkBlue);
+        }
     }
 }

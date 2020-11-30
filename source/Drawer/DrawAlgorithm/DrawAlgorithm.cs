@@ -9,7 +9,7 @@ namespace PerlinLandscape
 {
     abstract class DrawAlgorithm
     {
-        public abstract void Process(Bitmap bitmap, Scene scene, int typeView = 0);
+        public abstract void Process(Bitmap bitmap, Scene scene);
         public abstract double GetZ(int x, int y);
     }
 }

@@ -15,7 +15,16 @@ namespace PerlinLandscape
         Drawer drawer = new Drawer(new ZBuffer());
         Bitmap bitmap;
         Scene scene;
+        HeightMap heightMap;
+        Landscape landscape;
+        Noize noize = new Perlin2d(1, 1, 0, 300);
         int typeView = 0;
+
+        int countOfGridKnot = 1;
+        int polygonStep = 20;
+        int maxHeight = 100;
+        int sizeMap = 300;
+
 
         bool isMoving = false;
         Point firstMove;
@@ -29,28 +38,39 @@ namespace PerlinLandscape
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            HeightMap newHeightMap = new HeightMap(new PerlinNoize(), 300, 300);
-            newHeightMap.Generate();
-            DotDraw vertex = new DotDraw(1, 1, 1);
-            Landscape landscape = new Landscape(newHeightMap, 500, 20);
-            scene.AddObject(landscape);
-            //scene.AddObject(new Cube(300));
+            countOfGridKnot = Convert.ToInt32(textPerlinKnot.Text);
+            sizeMap = Convert.ToInt32(textMapSize.Text);
+
+            noize = new Perlin2d(countOfGridKnot, countOfGridKnot, 0, sizeMap);
+            heightMap = new HeightMap(noize, sizeMap, sizeMap);
+            heightMap.Generate();
+            UpdateLandscape();
+            scene.AddObject(new Cube(300));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
+        }
+
+        private void UpdateLandscape()
+        {
+            landscape = new Landscape(heightMap, maxHeight, polygonStep);
+            scene.DeleteObjects();
+            scene.AddObject(landscape);
+            scene.camera.SetLookAtDot(landscape.CentralDot);
         }
 
         private void UpdateBitmap(Scene scene)
         {
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
 
-            drawer.Draw(bitmap, scene, typeView);
+            drawer.Draw(bitmap, scene);
             mainCanvas.Image = bitmap;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void update_Click(object sender, EventArgs e)
         {
-            typeView++;
-            typeView %= 3;
+            maxHeight = Convert.ToInt32(textMaxHeight.Text);
+            polygonStep = Convert.ToInt32(textPolygonStep.Text);
+            UpdateLandscape();
             UpdateBitmap(scene);
         }
 

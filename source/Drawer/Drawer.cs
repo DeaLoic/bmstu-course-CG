@@ -16,9 +16,9 @@ namespace PerlinLandscape
             this.drawAlgorithm = drawAlgorithm;
         }
 
-        public void Draw(Bitmap bitmap, Scene scene, int typeView = 0)
+        public void Draw(Bitmap bitmap, Scene scene)
         {
-            drawAlgorithm.Process(bitmap, scene, typeView);
+            drawAlgorithm.Process(bitmap, scene);
         }
 
         public double GetZ(int x, int y)

@@ -27,5 +27,10 @@ namespace PerlinLandscape
             }
         }
 
+        protected Vector3d ReflectFromColor(Color color)
+        {
+            return new Vector3d(color.R / 255.0, color.G / 255.0, color.B / 255.0);
+        }
+
     }
 }

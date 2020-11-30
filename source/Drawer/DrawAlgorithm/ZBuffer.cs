@@ -11,10 +11,10 @@ namespace PerlinLandscape
     {
         double[,] Zbuf = new double[0, 0];
 
-        public override void Process(Bitmap bitmap, Scene scene, int typeView = 0)
+        public override void Process(Bitmap bitmap, Scene scene)
         {
             InitBuf(bitmap.Width, bitmap.Height, int.MaxValue);
-            Matrix4x4 mainMatrix = scene.GetMainTransform(typeView);
+            Matrix4x4 mainMatrix = scene.GetMainTransform();
             Matrix4x4 viewMatrix = scene.camera.GetLookAt();
             Matrix4x4 projectMatrix = scene.camera.GetProjectionSimple();
 

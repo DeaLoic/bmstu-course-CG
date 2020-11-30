@@ -151,6 +151,11 @@ namespace PerlinLandscape
         {
         }
 
+        public void SetLookAtDot(Dot3d dot)
+        {
+            lookAt = new Vector3d(dot);
+        }
+
         public ViewFrustum GetTransformFrustum()
         {
             viewFrustum = new ViewFrustum(place.ToDot(), up, lookAt - place, fov, (fov / aspectRatio), -cameraNear + 1, cameraFar);

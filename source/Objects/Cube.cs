@@ -30,6 +30,8 @@ namespace PerlinLandscape
             polygons[4].color = Color.DeepPink;
             polygons[5] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(0, 0, A.Z), new Dot3d(A.X, 0, A.Z), new Dot3d(A.X, 0, 0)));
             polygons[5].color = Color.DeepPink;
+
+            centralDot = new Dot3d(A.X / 2, A.Y / 2, A.Z / 2);
         }
 
         public override PollygonDraw[] GetPollygonsDraw()

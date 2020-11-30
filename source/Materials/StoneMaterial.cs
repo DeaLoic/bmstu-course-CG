@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
-namespace PerlinLandscape.Materials
+namespace PerlinLandscape
 {
-    class StoneMaterial
+    class StoneMaterial : Material
     {
+        public StoneMaterial() : base(0.7, 0.2)
+        {
+            colorReflect = ReflectFromColor(Color.DarkGray);
+        }
     }
 }
