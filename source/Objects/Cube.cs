@@ -23,7 +23,7 @@ namespace PerlinLandscape
             polygons[1] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(0, A.Y, 0), new Dot3d(0, A.Y, A.Z), new Dot3d(0, 0, A.Z)));
             polygons[1].color = Color.Red;
             polygons[2] = (new PollygonFour(A, new Dot3d(0, A.Y, A.Z), new Dot3d(0, 0, A.Z), new Dot3d(A.X, 0, A.Z)));
-            polygons[2].color = Color.Black;
+            polygons[2].SetMaterial(new IceMaterial());
             polygons[3] = (new PollygonFour(new Dot3d(0, 0, 0), new Dot3d(A.X, 0, 0), new Dot3d(A.X, A.Y, 0), new Dot3d(0, A.Y, 0)));
             polygons[3].color = Color.Black;
             polygons[4] = (new PollygonFour(A, new Dot3d(0, A.Y, A.Z), new Dot3d(0, A.Y, 0), new Dot3d(A.X, A.Y, 0)));

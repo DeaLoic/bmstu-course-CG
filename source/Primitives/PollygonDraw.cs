@@ -10,14 +10,16 @@ namespace PerlinLandscape
     class PollygonDraw : Pollygon
     {
         int averageHeight;
-        public List<Dot3d> pointsInside;
+
+
+        public List<DotDraw> pointsInside;
         public Color color;
-        Material material = new Material(0.5, 0.1);
+        Material material = new Material(0.5, 0.3);
         public Material Material { get => material; }
 
         public PollygonDraw(Dot3d[] dots, Material material = null) : base(dots)
         {
-            this.pointsInside = new List<Dot3d>();
+            this.pointsInside = new List<DotDraw>();
             if (material != null)
             {
                 this.material = material;
@@ -26,7 +28,7 @@ namespace PerlinLandscape
 
         public void CalculatePointsInside(int maxX, int maxY, int minX = 0, int minY = 0)
         {
-            pointsInside = new List<Dot3d>();
+            pointsInside = new List<DotDraw>();
 
             if (dots.Length > 2)
             {
@@ -59,6 +61,9 @@ namespace PerlinLandscape
 
             yMin = (yMin < firstYPossible) ? firstYPossible : yMin;
             yMax = (yMax < lastYPossible) ? yMax : lastYPossible;
+
+            yMin = (yMin > lastYPossible) ? lastYPossible : yMin;
+            yMax = (yMax > firstYPossible) ? yMax : firstYPossible;
 
             double x1 = 0, x2 = 0;
             double z1 = 0, z2 = 0;
@@ -102,17 +107,26 @@ namespace PerlinLandscape
                     z2 = temp;
                 }
                 double xStart = (x1 < firstXPossible) ? firstXPossible : x1;
+                xStart = (xStart > lastXPossible) ? lastXPossible : xStart;
+
                 double xEnd = (x2 < lastXPossible) ? x2 : lastXPossible;
+                xEnd = (xEnd > firstXPossible) ? xEnd : firstXPossible;
+
                 for (int xDot = (int)xStart; xDot <= xEnd; xDot++)
                 {
                     if (x1 - x2 != 0)
                     { 
                         double m = (double)(x1 - xDot) / (x1 - x2);
                         double zDot = z1 + m * (z2 - z1);
-                        pointsInside.Add(new Dot3d(xDot, yDot, zDot));
+                        pointsInside.Add(new DotDraw(xDot, yDot, zDot));
                     }
                 }
             }
+        }
+
+        public void SetMaterial(Material newMaterial)
+        {
+            material = newMaterial;
         }
     }
 }

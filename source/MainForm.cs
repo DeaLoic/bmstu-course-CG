@@ -12,13 +12,14 @@ namespace PerlinLandscape
 {
     public partial class MainForm : Form
     {
+        Drawer drawer = new Drawer(new ZBuffer());
         Bitmap bitmap;
         Scene scene;
         int typeView = 0;
 
         bool isMoving = false;
         Point firstMove;
-        double cameraSpeed = 10;
+        int cameraSpeed = 10;
         public MainForm()
         {
             InitializeComponent();
@@ -30,10 +31,10 @@ namespace PerlinLandscape
         {
             HeightMap newHeightMap = new HeightMap(new PerlinNoize(), 300, 300);
             newHeightMap.Generate();
-
+            DotDraw vertex = new DotDraw(1, 1, 1);
             Landscape landscape = new Landscape(newHeightMap, 500, 20);
             scene.AddObject(landscape);
-            //scene.AddObject(new Cube(5));
+            //scene.AddObject(new Cube(300));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
@@ -42,7 +43,7 @@ namespace PerlinLandscape
         {
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
 
-            new Drawer(new ZBuffer()).Draw(bitmap, scene, typeView);
+            drawer.Draw(bitmap, scene, typeView);
             mainCanvas.Image = bitmap;
         }
 
@@ -90,11 +91,24 @@ namespace PerlinLandscape
 
         private void mainCanvas_MouseUp(object sender, MouseEventArgs e)
         {
+            isMoving = false;
+        }
+
+        private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            coordinatesLabel.Text = String.Format("( {0}, {1}, {2} )", e.Location.X, e.Location.Y, drawer.GetZ(e.Location.Y, e.Location.X));
             if (isMoving)
             {
                 Point lastMove = e.Location;
-                isMoving = false;
-                scene.camera.Rotate((lastMove.X - firstMove.X) / cameraSpeed, (lastMove.Y - firstMove.Y) / cameraSpeed, 0);
+                scene.camera.Rotate(-(lastMove.Y - firstMove.Y) / cameraSpeed, (lastMove.X - firstMove.X) / cameraSpeed, 0);
+                if ((lastMove.Y - firstMove.Y) / cameraSpeed != 0)
+                {
+                    firstMove.Y = lastMove.Y;
+                }
+                if ((lastMove.X - firstMove.X) / cameraSpeed != 0)
+                {
+                    firstMove.X = lastMove.X;
+                }
                 UpdateBitmap(scene);
             }
         }

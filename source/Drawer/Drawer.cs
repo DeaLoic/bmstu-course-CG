@@ -20,5 +20,10 @@ namespace PerlinLandscape
         {
             drawAlgorithm.Process(bitmap, scene, typeView);
         }
+
+        public double GetZ(int x, int y)
+        {
+            return drawAlgorithm.GetZ(x, y);
+        }
     }
 }

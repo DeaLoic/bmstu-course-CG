@@ -40,6 +40,10 @@ namespace PerlinLandscape
                                                             new Dot3d(xOffset, yOffset + step, heightMap[i, j + step] * maxHeightDelta),
                                                             new Dot3d(xOffset + step, yOffset + step, heightMap[i + step, j + step] * maxHeightDelta),
                                                             new Dot3d(xOffset + step, yOffset, heightMap[i + step, j] * maxHeightDelta));
+                    if (heightMap[i, j] * maxHeightDelta > 20)
+                    {
+                        polygons[currentPos].SetMaterial(new IceMaterial());
+                    }
                     currentPos++;
                 }
             }

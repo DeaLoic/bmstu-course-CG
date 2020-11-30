@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,24 +69,18 @@ namespace PerlinLandscape
             this[3, 3] = 1;
         }
         
-        public Matrix4x4 InvertedTR()
+        public Matrix4x4 Transposed()
         {
             Matrix4x4 M = new Matrix4x4();
 
             // Create the transposed upper 3x3 matrix
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     M[i,j] = this[j,i];
                 }
             }
-
-            Vector3d translation = new Vector3d(this[3, 0], this[3, 1], this[3, 2]);
-            translation = -(translation * M);
-            M[0, 3] = translation.X;
-            M[1, 3] = translation.Y;
-            M[2, 3] = translation.Z;
 
             return M;
         }
@@ -174,6 +169,24 @@ namespace PerlinLandscape
                     this[i, j] = matrix[i, j];
                 }
             }
+        }
+
+        public void SetRotateAxis(double ox, double oy, double oz, Vector3d xaxis, Vector3d yaxis, Vector3d zaxis)
+        {
+            Matrix4x4 changeOrt = new Matrix4x4();
+            changeOrt.SetChangeOrts(xaxis, yaxis, zaxis);
+            Matrix4x4 matrix = new Matrix4x4();
+            matrix.SetRotate(ox, oy, oz);
+
+            this.body = (changeOrt * matrix * changeOrt.Transposed()).body;
+        }
+
+        public void SetChangeOrts(Vector3d xaxis, Vector3d yaxis, Vector3d zaxis)
+        {
+            this[0, 0] = xaxis.X; this[0, 1] = yaxis.X; this[0, 2] = zaxis.X; this[0, 3] = 0;
+            this[1, 0] = xaxis.Y; this[1, 1] = yaxis.Y; this[1, 2] = zaxis.Y; this[1, 3] = 0;
+            this[2, 0] = xaxis.Z; this[2, 1] = yaxis.Z; this[2, 2] = zaxis.Z; this[2, 3] = 0;
+            this[3, 0] = 0; this[3, 1] = 0; this[3, 2] = 0; this[3, 3] = 1;
         }
 
         public Dot3d Apply(Dot3d dot)

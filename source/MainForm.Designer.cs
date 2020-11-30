@@ -47,6 +47,7 @@
             this.textBoxYMove = new System.Windows.Forms.TextBox();
             this.textBoxXMove = new System.Windows.Forms.TextBox();
             this.buttonMove = new System.Windows.Forms.Button();
+            this.coordinatesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,6 +60,7 @@
             this.mainCanvas.TabIndex = 0;
             this.mainCanvas.TabStop = false;
             this.mainCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseDown);
+            this.mainCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseMove);
             this.mainCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseUp);
             // 
             // generateButton
@@ -223,12 +225,21 @@
             this.buttonMove.UseVisualStyleBackColor = true;
             this.buttonMove.Click += new System.EventHandler(this.buttonMove_Click);
             // 
+            // coordinatesLabel
+            // 
+            this.coordinatesLabel.AutoSize = true;
+            this.coordinatesLabel.Location = new System.Drawing.Point(23, 606);
+            this.coordinatesLabel.Name = "coordinatesLabel";
+            this.coordinatesLabel.Size = new System.Drawing.Size(0, 13);
+            this.coordinatesLabel.TabIndex = 19;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(940, 643);
+            this.Controls.Add(this.coordinatesLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -277,6 +288,7 @@
         private System.Windows.Forms.TextBox textBoxYMove;
         private System.Windows.Forms.TextBox textBoxXMove;
         private System.Windows.Forms.Button buttonMove;
+        private System.Windows.Forms.Label coordinatesLabel;
     }
 }
 

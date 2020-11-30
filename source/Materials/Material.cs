@@ -11,15 +11,20 @@ namespace PerlinLandscape
     {
         double diffuse;
         double specular;
-        Color color;
+        protected Vector3d colorReflect = new Vector3d(0.8, 0, 0.2);
 
         public double Diffuse { get => diffuse; }
         public double Specular { get => specular; }
+        public Vector3d ColorReflect { get => colorReflect; }
 
-        public Material(double diffuseCoeff, double specularCoeff)
+        public Material(double diffuseCoeff, double specularCoeff, Vector3d colorReflect = null)
         {
             diffuse = diffuseCoeff;
             specular = specularCoeff;
+            if (colorReflect != null)
+            {
+                this.colorReflect = colorReflect.Copy();
+            }
         }
 
     }

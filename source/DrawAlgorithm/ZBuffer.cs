@@ -9,11 +9,15 @@ namespace PerlinLandscape
 {
     class ZBuffer : DrawAlgorithm
     {
+        double[,] Zbuf = new double[0, 0];
+
         public override void Process(Bitmap bitmap, Scene scene, int typeView = 0)
         {
-            int[][] Zbuf = null;
-            InitBuf(ref Zbuf, bitmap.Width, bitmap.Height, int.MinValue);
+            InitBuf(bitmap.Width, bitmap.Height, int.MaxValue);
             Matrix4x4 mainMatrix = scene.GetMainTransform(typeView);
+            Matrix4x4 viewMatrix = scene.camera.GetLookAt();
+            Matrix4x4 projectMatrix = scene.camera.GetProjectionSimple();
+
             ViewFrustum viewFrustum = scene.GetCameraFrustum();
             Shader shader = new Shader(scene.lightSource, scene.camera.place.ToDot());
             foreach (Object m in scene.GetObjects())
@@ -21,27 +25,38 @@ namespace PerlinLandscape
                 ProcessModel(Zbuf, bitmap, m, mainMatrix, viewFrustum, shader);
             }
         }
-
-        private void InitBuf(ref int[][] buf, int w, int h, int value)
+        public override double GetZ(int x, int y)
         {
-            buf = new int[h][];
+            try
+            {
+                return Zbuf[x - 1, y - 1];
+            }
+            catch
+            {
+                return int.MinValue;
+            }
+        }
+        private void InitBuf(int w, int h, double value)
+        {
+            Zbuf = new double[h, w];
             for (int i = 0; i < h; i++)
             {
-                buf[i] = new int[w];
                 for (int j = 0; j < w; j++)
-                    buf[i][j] = value;
+                {
+                    Zbuf[i, j] = value;
+                }
             }
         }
 
-        private void ProcessModel(int[][] buffer, Bitmap image, Object o, Matrix4x4 transform, ViewFrustum frustum, Shader shader)
+        private void ProcessModel(double[,] buffer, Bitmap image, Object o, Matrix4x4 mainMatrix, ViewFrustum frustum, Shader shader)
         {
             Color draw;
             foreach (PollygonDraw pol in o.GetPollygonsDraw())
             {
                 PollygonDraw polygon = frustum.Clip(pol);
-                polygon.Transform(transform);
+                polygon.Transform(mainMatrix);
                 polygon.Normilize();
-                polygon.CalculatePointsInside(image.Width / 2, image.Height / 2, -image.Width / 2, -image.Height / 2);
+                polygon.CalculatePointsInside(image.Width, image.Height, -image.Width, -image.Height);
                 draw = shader.GetColorSimple(pol);
                 foreach (Dot3d point in polygon.pointsInside)
                 {
@@ -50,20 +65,21 @@ namespace PerlinLandscape
             }
         }
 
-        private void ProcessPoint(int[][] buffer, Bitmap image, Dot3d point, Color color)
+        private void ProcessPoint(double[,] buffer, Bitmap image, Dot3d point, Color color)
         {
             int h = image.Height;
             int w = image.Width;
             
-            point = new Dot3d(point.X / point.W + image.Width / 2, point.Y / point.W + image.Height / 2, point.Z / point.W);
+            point = new Dot3d(point.X / point.W + w / 2, point.Y / point.W + h / 2, point.Z / point.W);
             
             if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h || double.IsNaN(point.X) || double.IsNaN(point.Y)))// || point.Z > 1 || point.Z < 0))
             {
-                if (point.Z >= buffer[(int)point.Y][(int)point.X])
+                if (point.Z <= buffer[(int)point.Y, (int)point.X])
                 {
-                    buffer[(int)point.Y][(int)point.X] = (int)point.Z;
+                    buffer[(int)point.Y, (int)point.X] = point.Z;
                     image.SetPixel((int)point.X, (int)point.Y, color);
                 }
+                double a = buffer[(int)point.Y, (int)point.X];
             }
         }
     }

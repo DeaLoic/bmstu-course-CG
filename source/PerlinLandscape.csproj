@@ -58,7 +58,14 @@
     <Compile Include="GraphicMath\Matrix4x4.cs" />
     <Compile Include="GraphicMath\Matrix4x41.cs" />
     <Compile Include="GraphicMath\Converter.cs" />
+    <Compile Include="Materials\IceMaterial.cs" />
     <Compile Include="Materials\Material.cs" />
+    <Compile Include="Materials\MaterialGrass.cs" />
+    <Compile Include="Materials\SandMaterial.cs" />
+    <Compile Include="Materials\StoneMaterial.cs" />
+    <Compile Include="Materials\WaterMaterial.cs" />
+    <Compile Include="Primitives\DotDraw.cs" />
+    <Compile Include="Primitives\Vertex.cs" />
     <Compile Include="Shader\LightSource.cs" />
     <Compile Include="Objects\Cube.cs" />
     <Compile Include="Drawer\Drawer.cs" />

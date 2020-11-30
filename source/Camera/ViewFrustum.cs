@@ -18,10 +18,10 @@ namespace PerlinLandscape
         Cutter upper;
         Cutter under;
 
-        public ViewFrustum(Dot3d center, Vector3d up, Vector3d lookVector, int fovWidth, int fovHeight, double nearDistance, double farDistance)
+        public ViewFrustum(Dot3d center, Vector3d up, Vector3d lookVector, double fovHalfWidth, double fovHalfHeight, double nearDistance, double farDistance)
         {
-            double tanWidth = Math.Tan(MathSupport.ToRadian(fovWidth / (double)2));
-            double tanHeight = Math.Tan(MathSupport.ToRadian(fovHeight / (double)2));
+            double tanWidth = 1 / Math.Tan(fovHalfWidth);
+            double tanHeight = 1 / Math.Tan(fovHalfHeight);
             lookVector = lookVector.Normalized();
             if (lookVector.Length == 0)
             {
@@ -37,18 +37,18 @@ namespace PerlinLandscape
             Vector3d nearBase = offsetVec + lookVector * nearDistance;
             Vector3d nearUp = up * (nearDistance * tanHeight);
             Vector3d nearRight = widthVec * (nearDistance * tanWidth);
-            A = (nearBase + nearUp - nearRight).ToDot();
-            B = (nearBase + nearUp + nearRight).ToDot();
-            C = (nearBase - nearUp + nearRight).ToDot();
-            D = (nearBase - nearUp - nearRight).ToDot();
+            A = (Dot3d)(nearBase + nearUp - nearRight).ToDot();
+            B = (Dot3d)(nearBase + nearUp + nearRight).ToDot();
+            C = (Dot3d)(nearBase - nearUp + nearRight).ToDot();
+            D = (Dot3d)(nearBase - nearUp - nearRight).ToDot();
 
             Vector3d farBase = offsetVec + lookVector * farDistance;
             Vector3d farUp = up * (farDistance * tanHeight);
             Vector3d farRight = widthVec * (farDistance * tanWidth);
-            E = (farBase + farUp - farRight).ToDot();
-            F = (farBase + farUp + farRight).ToDot();
-            G = (farBase - farUp + farRight).ToDot();
-            H = (farBase - farUp - farRight).ToDot();
+            E = (Dot3d)(farBase + farUp - farRight).ToDot();
+            F = (Dot3d)(farBase + farUp + farRight).ToDot();
+            G = (Dot3d)(farBase - farUp + farRight).ToDot();
+            H = (Dot3d)(farBase - farUp - farRight).ToDot();
 
             Dot3d controlDot = farBase.ToDot();
             near = new Cutter(new Dot3d[] { A, B, C, D });
@@ -91,12 +91,12 @@ namespace PerlinLandscape
 
         public PollygonDraw Clip(PollygonDraw pollygon)
         {
-            PollygonDraw result = near.Clip(pollygon);
+            PollygonDraw result = new PollygonDraw(pollygon.GetDots());
+            result = near.Clip(pollygon);
             if (result.Size > 0)
             {
                 result = far.Clip(result);
             }
-            /*
             if (result.Size > 0)
             {
                 result = left.Clip(result);
@@ -113,7 +113,6 @@ namespace PerlinLandscape
             {
                 result = under.Clip(result);
             }
-            */
             return result;
         }
     }

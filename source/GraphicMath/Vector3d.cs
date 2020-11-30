@@ -85,6 +85,10 @@ namespace PerlinLandscape
         {
             return new Vector3d(first.x * s, first.y * s, first.z * s, first.w);
         }
+        public static Vector3d operator *(Vector3d first, Vector3d second)
+        {
+            return new Vector3d(first.x * second.x, first.y * second.y, first.z * second.z, first.w);
+        }
         public static Vector3d operator /(Vector3d first, double s)
         {
             s = s != 0 ? s : 1;

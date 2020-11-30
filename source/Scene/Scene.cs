@@ -40,7 +40,7 @@ namespace PerlinLandscape
             }
             perspective = camera.GetProjectionSimple();
 
-            return view;
+            return view * perspective;
         }
 
         public ViewFrustum GetCameraFrustum()

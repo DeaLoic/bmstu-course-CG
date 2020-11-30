@@ -13,7 +13,7 @@ namespace PerlinLandscape
         Dot3d viewer;
         double ambient;
         double specularPower = 1;
-        public Shader(LightSource lightSource, Dot3d viewerPlace, double ambientCoeff = 0.1, double specularPower = 10)
+        public Shader(LightSource lightSource, Dot3d viewerPlace, double ambientCoeff = 0.1, double specularPower = 1)
         {
             light = lightSource;
             viewer = viewerPlace;
@@ -31,16 +31,17 @@ namespace PerlinLandscape
                 coeffs = coeffs + GetCoeffInDot(dot, normal, pollygon.Material);
             }
             coeffs = coeffs / pollygon.Size;
-            Color ambientColor = MulltiplyColor(coeffs.X, pollygon.color);
-            Color diffuse = MulltiplyColor(coeffs.Y, pollygon.color);
+            Color ambientColor = MulltiplyColor(coeffs.X, light.Color);
+            Color diffuse = MulltiplyColor(coeffs.Y, light.Color);
             Color specular = MulltiplyColor(coeffs.Z, light.Color);
 
-            return Add(Add(ambientColor, diffuse), specular);
+            return MulltiplyColor(pollygon.Material.ColorReflect, Add(Add(ambientColor, diffuse), specular));
         }
 
         public Vector3d GetCoeffInDot(Dot3d dot, Vector3d normal, Material material)
         {
             Vector3d lightVector = new Vector3d(viewer - dot);
+            lightVector.Normalize();
             Vector3d H = (lightVector + new Vector3d(viewer - dot).Normalized());
             H.Normalize();
             double diffuse = material.Diffuse * Math.Max(0, (lightVector).DotProduct(normal));
@@ -55,6 +56,12 @@ namespace PerlinLandscape
             coeff = coeff < 0 ? 0 : coeff;
             return Color.FromArgb((int)(color.R * coeff), (int)(color.G * coeff), (int)(color.B * coeff));
         }
+
+        public Color MulltiplyColor(Vector3d coeff, Color color)
+        {
+            return Color.FromArgb((int)(color.R * coeff.X), (int)(color.G * coeff.Y), (int)(color.B * coeff.Z));
+        }
+
         public Color Add(Color first, Color second)
         {
             int red = first.R + second.R;
@@ -72,5 +79,6 @@ namespace PerlinLandscape
 
             return Color.FromArgb(red, green, blue);
         }
+
     }
 }
