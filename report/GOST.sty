@@ -28,6 +28,18 @@ bottom 	=	20	mm,
 \titleformat{\subsection}
 {\normalfont\fontsize{14}{14}\bfseries}{\thesubsection}{1em}{}
 
+
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{0ex}%
+    {-3.25ex plus -1ex minus -0.2ex}%
+    {1.5ex plus 0.2ex}%
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+ 
+\stepcounter{secnumdepth}
+\stepcounter{tocdepth}
+
+
 \usepackage[intoc]{nomencl}
 \renewcommand{\nomname}{Обозначения и сокращения}
 \makenomenclature
