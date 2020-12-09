@@ -194,7 +194,7 @@ namespace PerlinLandscape
             Vector3d dotVector;
 
             dotVector = (new Vector3d(dot) * this);
-            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z, dotVector.W);
+            return new Dot3d(dotVector.X, dotVector.Y, dotVector.Z, dotVector.W, dot.Normal);
         }
 
         public Matrix4x4 MultiplyVinograd(Matrix4x4 second)

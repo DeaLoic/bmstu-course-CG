@@ -1,6 +1,8 @@
 ﻿using PerlinLandscape.Materials;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +13,15 @@ namespace PerlinLandscape
     {
         HeightMap heightMap;
         PollygonDraw[] polygons;
+        Dot3d[,] dots;
         int iceHeight = 480;
         int stoneHeight = 370;
         int grassHeight = 100;
         int waterHeight = 10;
+        int maxHeightDelta;
+        int step;
 
-        public Landscape(HeightMap map, int maxHeightDelta = 500, int step = 4)
+        public Landscape(HeightMap map, int maxHeightDelta = 500, int step = 4, bool generate = true)
         {
             polygons = new PollygonFour[0];
             heightMap = map;
@@ -24,9 +29,78 @@ namespace PerlinLandscape
             stoneHeight = maxHeightDelta - stoneHeight;
             grassHeight = maxHeightDelta - grassHeight;
             waterHeight = maxHeightDelta - waterHeight;
-            FormPollygons(step, maxHeightDelta);
+            this.maxHeightDelta = maxHeightDelta;
+            this.step = step;
+            if (generate)
+            {
+                FormDots();
+                FormPollygons(step, maxHeightDelta);
+            }
         }
 
+        private void FormDots()
+        {
+            this.dots = new Dot3d[heightMap.Width, heightMap.Height];
+            int xOffset = -heightMap.Width / 2;
+            int yOffsetZero = -heightMap.Height / 2;
+            int yOffset = 0;
+            for (int i = 0; i < (heightMap.Width); i += 1, xOffset += 1)
+            {
+                yOffset = yOffsetZero;
+                for (int j = 0; j < (heightMap.Height); j += 1, yOffset += 1)
+                {
+                    dots[i, j] = new Dot3d(xOffset, yOffset, heightMap[i, j] * maxHeightDelta);
+                }
+            }
+
+            for (int i = 0; i < heightMap.Width - 1; i += 1)
+            {
+                for (int j = 0; j < heightMap.Height - 1; j += 1)
+                {
+                    Dot3d.CountDotsNormal(dots[i, j], dots[i, j + 1], dots[i + 1, j + 1], dots[i + 1, j]);
+                }
+            }
+        }
+
+        public override void Colorize(Shader shader)
+        {
+            for (int i = 0; i < (heightMap.Width); i++)
+            {
+                for (int j = 0; j < (heightMap.Height); j++)
+                {
+                    dots[i, j].coeffColor = shader.GetCoeffInDot(dots[i, j], dots[i, j].Normal);
+                }
+            }
+        }
+
+        public override Object Transform(Matrix4x4 transformation)
+        {
+            Dot3d[,] newDots = new Dot3d[(heightMap.Width / step), (heightMap.Height / step)];
+            for (int i = 0; i < (heightMap.Width); i += step)
+            {
+                for (int j = 0; j < (heightMap.Height); j += step)
+                {
+                    newDots[i / step, j / step] = transformation.Apply(dots[i, j]);
+                    newDots[i / step, j / step].coeffColor = dots[i, j].coeffColor;
+                }
+            }
+            Landscape landscape = new Landscape(heightMap, maxHeightDelta, step, false);
+            landscape.polygons = new PollygonFour[((heightMap.Width - 1 )/ step) * ((heightMap.Height - 1)/ step)];
+            int currentPos = 0;
+            for (int i = 0; i < (heightMap.Width / step) - 1; i++)
+            {
+                for(int j = 0; j < (heightMap.Height / step) - 1; j++)
+                {
+                    PollygonFour pol = new PollygonFour(newDots[i, j], newDots[i, j + 1], newDots[i + 1, j + 1], newDots[i + 1, j]);
+                    pol.color = polygons[currentPos].color;
+                    pol.SetMaterial(polygons[currentPos].Material);
+                    landscape.polygons[currentPos] = pol;
+                    currentPos++;
+                }
+            }
+
+            return landscape;
+        }
         public override PollygonDraw[] GetPollygonsDraw()
         {
             return polygons;
@@ -47,33 +121,13 @@ namespace PerlinLandscape
                 yOffset = yOffsetZero;
                 for (int j = 0; j < (heightMap.Height - step); j += step, yOffset += step)
                 {
-
-                    polygons[currentPos] = new PollygonFour(new Dot3d(xOffset, yOffset, heightMap[i, j] * maxHeightDelta),
-                                                            new Dot3d(xOffset, yOffset + step, heightMap[i, j + step] * maxHeightDelta),
-                                                            new Dot3d(xOffset + step, yOffset + step, heightMap[i + step, j + step] * maxHeightDelta),
-                                                            new Dot3d(xOffset + step, yOffset, heightMap[i + step, j] * maxHeightDelta));
+                    PollygonFour pol = new PollygonFour(dots[i, j], dots[i, j + step], dots[i + step, j + step], dots[i + step, j]);
                     double currentHeight = heightMap[i, j] + heightMap[i, j + step] + heightMap[i + step, j + step] + heightMap[i + step, j];
                     heightMax = Math.Max(heightMax, currentHeight / 4);
                     heightMin = Math.Min(heightMin, heightMap[i, j]);
                     heightMiddle += currentHeight;
-                    currentHeight *= (maxHeightDelta / 4);
-                    if (currentHeight > iceHeight)
-                    {
-                        polygons[currentPos].SetMaterial(new IceMaterial());
-                    }
-                    if (currentHeight > stoneHeight)
-                    {
-                        polygons[currentPos].SetMaterial(new StoneMaterial());
-                    }
-                    if (currentHeight > grassHeight)
-                    {
-                        polygons[currentPos].SetMaterial(new MaterialGrass());
-                        polygons[currentPos].Material.Outrage(5, (int)DateTime.UtcNow.Ticks * DateTime.UtcNow.Millisecond * (int)currentHeight);
-                    }
-                    if (currentHeight > waterHeight)
-                    {
-                        polygons[currentPos].SetMaterial(new WaterMaterial());
-                    }
+                    PaintPolygon(pol);
+                    polygons[currentPos] = pol;
 
                     currentPos++;
                 }
@@ -82,6 +136,29 @@ namespace PerlinLandscape
             heightMiddle *= maxHeightDelta;
 
             centralDot = new Dot3d(0, 0, heightMiddle);
+        }
+
+        private void PaintPolygon(PollygonFour pollygon)
+        {
+            double currentHeight = pollygon.A.Z + pollygon.B.Z + pollygon.C.Z + pollygon.D.Z;
+            currentHeight *= (maxHeightDelta / 4);
+            if (currentHeight > iceHeight)
+            {
+                pollygon.SetMaterial(new IceMaterial());
+            }
+            if (currentHeight > stoneHeight)
+            {
+                pollygon.SetMaterial(new StoneMaterial());
+            }
+            if (currentHeight > grassHeight)
+            {
+                pollygon.SetMaterial(new MaterialGrass());
+                pollygon.Material.Outrage(5, (int)DateTime.UtcNow.Ticks * DateTime.UtcNow.Millisecond * (int)currentHeight);
+            }
+            if (currentHeight > waterHeight)
+            {
+                pollygon.SetMaterial(new WaterMaterial());
+            }
         }
     }
 }

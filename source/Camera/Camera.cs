@@ -30,7 +30,7 @@ namespace PerlinLandscape
             this.cameraFar = cameraFar;
             lookAt = new Vector3d(0, 0, 0);
             this.xScale = ((widthWindow / 2) / cameraNear);
-            viewFrustum = new ViewFrustum(place, up, new Vector3d(0, 0, 0) - new Vector3d(place), fov, (fov / aspectRatio), cameraNear, cameraFar);
+            viewFrustum = new ViewFrustum(place, up, new Vector3d(0, 0, 0) - new Vector3d(0, 0, -cameraNear), fov, (fov / aspectRatio), cameraNear, cameraFar);
             transformToView.Reset();
         }
 
@@ -152,6 +152,12 @@ namespace PerlinLandscape
         public void SetLookAtDot(Dot3d dot)
         {
             lookAt = new Vector3d(dot);
+        }
+
+        public ViewFrustum GetFrustum()
+        {
+            viewFrustum = new ViewFrustum(new Dot3d(0, 0, -cameraNear), new Vector3d(1, 0, 0), new Vector3d(0, 0, 0) - new Vector3d(0, 0, -cameraNear), fov, (fov / aspectRatio), -cameraNear, cameraFar);
+            return viewFrustum;
         }
 
         public ViewFrustum GetTransformFrustum()

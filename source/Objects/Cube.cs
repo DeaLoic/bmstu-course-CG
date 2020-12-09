@@ -38,5 +38,14 @@ namespace PerlinLandscape
         {
             return polygons;
         }
+        public override Object Transform(Matrix4x4 transformation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Colorize(Shader shader)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -71,7 +71,6 @@
     <Compile Include="Shader\LightSource.cs" />
     <Compile Include="Objects\Cube.cs" />
     <Compile Include="Drawer\Drawer.cs" />
-    <Compile Include="GraphicMath\Transform.cs" />
     <Compile Include="Objects\Cutter.cs" />
     <Compile Include="Primitives\Pollygon.cs" />
     <Compile Include="Primitives\PollygonDraw.cs" />

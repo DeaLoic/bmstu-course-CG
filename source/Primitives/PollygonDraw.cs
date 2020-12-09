@@ -48,12 +48,14 @@ namespace PerlinLandscape
             double yMax, yMin;
             double[] x = new double[3], y = new double[3];
             double[] z = new double[3];
+            Vector3d[] c = new Vector3d[3];
 
             for (int i = 0; i < 3; i++)
             {
                 x[i] = (v[i].X / v[i].W);
                 y[i] = (v[i].Y / v[i].W);
                 z[i] = (v[i].Z / v[i].W);
+                c[i] = v[i].coeffColor;
             }
 
             yMax = y.Max();
@@ -67,6 +69,8 @@ namespace PerlinLandscape
 
             double x1 = 0, x2 = 0;
             double z1 = 0, z2 = 0;
+
+            Vector3d c1 = new Vector3d(1, 1, 1), c2 = new Vector3d(1, 1, 1);
 
             for (int yDot = (int)yMin; yDot <= yMax; yDot++)
             {
@@ -87,11 +91,13 @@ namespace PerlinLandscape
                     {
                         x2 = x[n] + (m * (x[n1] - x[n]));
                         z2 = z[n] + m * (z[n1] - z[n]);
+                        c2 = c[n] + ((c[n1] - c[n]) * m);
                     }
                     else
                     {
                         x1 = x[n] + (m * (x[n1] - x[n]));
                         z1 = z[n] + m * (z[n1] - z[n]);
+                        c1 = c[n] + ((c[n1] - c[n]) * m);
                     }
                     fFirst = 0;
                 }
@@ -105,6 +111,10 @@ namespace PerlinLandscape
                     temp = z1;
                     z1 = z2;
                     z2 = temp;
+
+                    Vector3d tempCoeff = c1;
+                    c1 = c2;
+                    c2 = tempCoeff;
                 }
                 double xStart = (x1 < firstXPossible) ? firstXPossible : x1;
                 xStart = (xStart > lastXPossible) ? lastXPossible : xStart;
@@ -118,7 +128,7 @@ namespace PerlinLandscape
                     { 
                         double m = (double)(x1 - xDot) / (x1 - x2);
                         double zDot = z1 + m * (z2 - z1);
-                        pointsInside.Add(new DotDraw(xDot, yDot, zDot));
+                        pointsInside.Add(new DotDraw(xDot, yDot, zDot, coeffColor: c1 + ((c2 - c1) * m)));
                     }
                 }
             }

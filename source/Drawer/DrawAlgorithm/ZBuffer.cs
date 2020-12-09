@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PerlinLandscape
 {
@@ -18,11 +19,14 @@ namespace PerlinLandscape
             Matrix4x4 viewMatrix = scene.camera.GetLookAt();
             Matrix4x4 projectMatrix = scene.camera.GetProjectionSimple();
 
+            ViewFrustum unTransformed = scene.camera.GetFrustum();
             ViewFrustum viewFrustum = scene.GetCameraFrustum();
             Shader shader = new Shader(scene.lightSource, scene.camera.place.ToDot());
             foreach (Object m in scene.GetObjects())
             {
-                ProcessModel(Zbuf, bitmap, m, mainMatrix, viewFrustum, shader);
+                m.Colorize(shader);
+                Object transformedModel = m.Transform(mainMatrix);
+                ProcessModel(Zbuf, bitmap, transformedModel, mainMatrix, unTransformed, shader);
             }
         }
         public override double GetZ(int x, int y)
@@ -54,12 +58,12 @@ namespace PerlinLandscape
             foreach (PollygonDraw pol in o.GetPollygonsDraw())
             {
                 PollygonDraw polygon = frustum.Clip(pol);
-                polygon.Transform(mainMatrix);
                 polygon.Normilize();
                 polygon.CalculatePointsInside(image.Width, image.Height, -image.Width, -image.Height);
-                draw = shader.GetColorSimple(pol);
+                //draw = Shader.GetAnswerColor((pol.GetDots()[0].coeffColor + pol.GetDots()[1].coeffColor + pol.GetDots()[2].coeffColor + pol.GetDots()[3].coeffColor) / 4, pol.Material, shader.Color);
                 foreach (Dot3d point in polygon.pointsInside)
                 {
+                    draw = Shader.GetAnswerColor(point.coeffColor, pol.Material, shader.Color);
                     ProcessPoint(buffer, image, point, draw);
                 }
             }
@@ -69,7 +73,7 @@ namespace PerlinLandscape
         {
             int h = image.Height;
             int w = image.Width;
-            
+
             point = new Dot3d(point.X / point.W + w / 2, point.Y / point.W + h / 2, point.Z / point.W);
             
             if (!(point.X < 0 || point.X >= w || point.Y < 0 || point.Y >= h || double.IsNaN(point.X) || double.IsNaN(point.Y)))// || point.Z > 1 || point.Z < 0))

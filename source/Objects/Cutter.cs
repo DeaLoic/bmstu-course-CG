@@ -48,7 +48,7 @@ namespace PerlinLandscape
                         {
                             Array.Resize(ref result, (int)(fill * 1.5));
                         }
-                        result[fill] = new Dot3d(p1.X + k * (p2.X - p1.X), p1.Y + k * (p2.Y - p1.Y), p1.Z + k * (p2.Z - p1.Z));
+                        result[fill] = new Dot3d(p1.X + k * (p2.X - p1.X), p1.Y + k * (p2.Y - p1.Y), p1.Z + k * (p2.Z - p1.Z), normal: p1.Normal + (((p2.Normal + p1.Normal).Normalized()) * k));
                         fill++;
                     }
                 }

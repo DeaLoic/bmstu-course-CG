@@ -17,6 +17,8 @@ namespace PerlinLandscape
         {
             this.isVisible = isVisible;
         }
+        public abstract Object Transform(Matrix4x4 transformation);
+        public abstract void Colorize(Shader shader);
         public abstract PollygonDraw[] GetPollygonsDraw();
     }
 }

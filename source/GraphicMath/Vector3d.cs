@@ -101,11 +101,11 @@ namespace PerlinLandscape
 
         public static Dot3d operator +(Dot3d first, Vector3d second)
         {
-            return new Dot3d(first.X + second.x, first.Y + second.y, first.Z + second.z, second.w);
+            return new Dot3d(first.X + second.x, first.Y + second.y, first.Z + second.z, second.w, first.Normal);
         }
         public static Dot3d operator -(Dot3d first, Vector3d second)
         {
-            return new Dot3d(first.X - second.x, first.Y - second.y, first.Z - second.z, second.w);
+            return new Dot3d(first.X - second.x, first.Y - second.y, first.Z - second.z, second.w, first.Normal);
         }
     }
 }
