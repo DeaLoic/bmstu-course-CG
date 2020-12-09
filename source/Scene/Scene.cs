@@ -22,6 +22,10 @@ namespace PerlinLandscape
             objects[objects.Count() - 1] = addingObject;
         }
 
+        public void SetLight(Dot3d place)
+        {
+            lightSource.SetPlace(place);
+        }
         public Matrix4x4 GetMainTransform()
         {
             Matrix4x4 view;

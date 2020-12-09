@@ -131,10 +131,8 @@ namespace PerlinLandscape
             transform.SetTransfer(move.X, move.Y, move.Z);
             transformToView = transformToView * transform;
         }
-        public void Rotate(double ox, double oy, double  oz, Dot3d rotateCenter = null)
+        public void Rotate(double ox, double oy, double oz, Dot3d rotateCenter = null)
         {
-            //view.AddDegrees(ox, oy, oz);
-
             var transform = new Matrix4x4();
             Vector3d zaxis = (lookAt - place).Normalized();
             Vector3d xaxis = up.Cross(zaxis).Normalized();
@@ -158,7 +156,7 @@ namespace PerlinLandscape
 
         public ViewFrustum GetTransformFrustum()
         {
-            viewFrustum = new ViewFrustum(place.ToDot(), up, lookAt - place, fov, (fov / aspectRatio), -cameraNear + 1, cameraFar);
+            viewFrustum = new ViewFrustum(place.ToDot(), up, lookAt - place, fov, (fov / aspectRatio), -cameraNear - 1, cameraFar);
             return viewFrustum;
             // viewFrustum.Transform(GetView());
         }

@@ -9,7 +9,7 @@ namespace PerlinLandscape.Materials
 {
     class WaterMaterial : Material
     {
-        public WaterMaterial() : base(0.4, 0.5)
+        public WaterMaterial() : base(0.4, 0.3)
         {
             colorReflect = ReflectFromColor(Color.DarkBlue);
         }

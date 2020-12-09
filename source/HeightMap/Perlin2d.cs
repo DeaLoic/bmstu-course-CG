@@ -22,11 +22,13 @@ namespace PerlinLandscape
                                 new Vector3d(0, -1)
                                 };
             grid = new Vector3d[width + 1, height + 1];
+            double angle;
             for (var i = 0; i < width + 1; i++)
             {
                 for (var j = 0; j < height + 1; j++)
                 {
-                    grid[i, j] = availableGradients[random.Next(3)];
+                    angle = random.NextDouble() * Math.PI * 2;
+                    grid[i, j] = new Vector3d(Math.Cos(angle), Math.Sin(angle));
                 }
             }
             this.stepX = (double)width / (maxReal - minReal);

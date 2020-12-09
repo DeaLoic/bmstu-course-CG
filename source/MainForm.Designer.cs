@@ -31,9 +31,7 @@
             this.mainCanvas = new System.Windows.Forms.PictureBox();
             this.generateButton = new System.Windows.Forms.Button();
             this.updateButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.buttonRotate = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.textBoxXRotate = new System.Windows.Forms.TextBox();
             this.textBoxYRotate = new System.Windows.Forms.TextBox();
             this.textBoxZRotate = new System.Windows.Forms.TextBox();
@@ -58,6 +56,8 @@
             this.textMapSize = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lightToCamera = new System.Windows.Forms.Button();
+            this.animation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -95,16 +95,6 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.update_Click);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(889, 308);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(73, 34);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // buttonRotate
             // 
             this.buttonRotate.Location = new System.Drawing.Point(878, 512);
@@ -115,16 +105,6 @@
             this.buttonRotate.UseVisualStyleBackColor = true;
             this.buttonRotate.Visible = false;
             this.buttonRotate.Click += new System.EventHandler(this.buttonRotate_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(812, 310);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(71, 31);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBoxXRotate
             // 
@@ -348,12 +328,34 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Update";
             // 
+            // lightToCamera
+            // 
+            this.lightToCamera.Location = new System.Drawing.Point(814, 267);
+            this.lightToCamera.Name = "lightToCamera";
+            this.lightToCamera.Size = new System.Drawing.Size(64, 36);
+            this.lightToCamera.TabIndex = 30;
+            this.lightToCamera.Text = "Fix light at camera";
+            this.lightToCamera.UseVisualStyleBackColor = true;
+            this.lightToCamera.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // animation
+            // 
+            this.animation.Location = new System.Drawing.Point(908, 269);
+            this.animation.Name = "animation";
+            this.animation.Size = new System.Drawing.Size(66, 34);
+            this.animation.TabIndex = 31;
+            this.animation.Text = "Launch animation";
+            this.animation.UseVisualStyleBackColor = true;
+            this.animation.Click += new System.EventHandler(this.animation_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(999, 643);
+            this.Controls.Add(this.animation);
+            this.Controls.Add(this.lightToCamera);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.coordinatesLabel);
@@ -370,9 +372,7 @@
             this.Controls.Add(this.textBoxZRotate);
             this.Controls.Add(this.textBoxYRotate);
             this.Controls.Add(this.textBoxXRotate);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.buttonRotate);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.mainCanvas);
             this.Name = "MainForm";
             this.Text = "Form1";
@@ -391,9 +391,7 @@
         private System.Windows.Forms.PictureBox mainCanvas;
         private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.Button updateButton;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button buttonRotate;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox textBoxXRotate;
         private System.Windows.Forms.TextBox textBoxYRotate;
         private System.Windows.Forms.TextBox textBoxZRotate;
@@ -418,6 +416,8 @@
         private System.Windows.Forms.TextBox textMapSize;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button lightToCamera;
+        private System.Windows.Forms.Button animation;
     }
 }
 

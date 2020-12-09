@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,7 +19,6 @@ namespace PerlinLandscape
         HeightMap heightMap;
         Landscape landscape;
         Noize noize = new Perlin2d(1, 1, 0, 300);
-        int typeView = 0;
 
         int countOfGridKnot = 1;
         int polygonStep = 20;
@@ -42,10 +42,21 @@ namespace PerlinLandscape
             sizeMap = Convert.ToInt32(textMapSize.Text);
 
             noize = new Perlin2d(countOfGridKnot, countOfGridKnot, 0, sizeMap);
+            Perlin2d noizeNoize = new Perlin2d(countOfGridKnot + 4, countOfGridKnot + 4, 0, sizeMap);
             heightMap = new HeightMap(noize, sizeMap, sizeMap);
             heightMap.Generate();
+            HeightMap heightMapNoize = new HeightMap(noizeNoize, sizeMap, sizeMap, 0.1);
+            heightMapNoize.Generate();
+            for (int i = 0; i < heightMap.Width; i++)
+            {
+                for (int j = 0; j < heightMap.Height; j++)
+                {
+                    heightMap[i, j] += heightMapNoize[i, j];
+                }
+            }
+
             UpdateLandscape();
-            scene.AddObject(new Cube(300));
+            //scene.AddObject(new Cube(300));
             //scene.camera.Rotate(0, 0, 10);
             UpdateBitmap(scene);
         }
@@ -131,6 +142,42 @@ namespace PerlinLandscape
                 }
                 UpdateBitmap(scene);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            scene.SetLight(scene.camera.place.ToDot());
+            UpdateBitmap(scene);
+        }
+
+        private void animation_Click(object sender, EventArgs e)
+        {
+            scene.SetLight(new Dot3d(10000, 0, 0));
+            double dx = 10000 / 30.0;
+            double dy = Math.Tan(MathSupport.ToRadian(3)) * dx;
+            Thread thread = new Thread(() => {
+            for (int i = 0; i < 30; i += 1)
+            {
+                scene.lightSource = new LightSource(new Dot3d(), new Vector3d(), Color.White);
+                if (i < 30)
+                {
+                    scene.lightSource = new LightSource(new Dot3d(), new Vector3d(), Color.LightGoldenrodYellow);
+                }
+                if (i < 10)
+                {
+                    scene.lightSource = new LightSource(new Dot3d(), new Vector3d(), Color.Orange);
+                }
+                    scene.SetLight(new Dot3d(10000 - dx * i, 0, -dx * i));
+                UpdateBitmap(scene);
+            }
+            scene.lightSource = new LightSource(new Dot3d(), new Vector3d(), Color.White);
+            for (int i = 0; i < 30; i += 1)
+            {
+                scene.SetLight(new Dot3d(0 - dx * i, 0, -10000 + dx * i));
+                UpdateBitmap(scene);
+            }
+            });
+            thread.Start();
         }
     }
 }

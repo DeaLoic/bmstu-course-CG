@@ -22,5 +22,9 @@ namespace PerlinLandscape
             this.lightVector = lightVector;
             this.color = color;
         }
+        public void SetPlace(Dot3d place)
+        {
+            this.place = place.Copy();
+        }
     }
 }

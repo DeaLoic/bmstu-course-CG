@@ -9,9 +9,9 @@ namespace PerlinLandscape
 {
     class MaterialGrass : Material
     {
-        public MaterialGrass() : base(0.8, 0.3)
+        public MaterialGrass() : base(0.8, 0.1)
         {
-            colorReflect = ReflectFromColor(Color.Green);
+            colorReflect = ReflectFromColor(Color.DarkGreen);
         }
     }
 }

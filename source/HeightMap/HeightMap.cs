@@ -12,6 +12,7 @@ namespace PerlinLandscape
         public int Width { get; }
 
         Noize noize;
+        double maxHeight;
 
         double[,] map;
         public double this[int i, int j]
@@ -20,12 +21,13 @@ namespace PerlinLandscape
             set => map[i, j] = value;
         }
 
-        public HeightMap(Noize noize, int height = 100, int width = 100)
+        public HeightMap(Noize noize, int height = 100, int width = 100, double maxHeight = 1)
         {
             this.noize = noize;
             this.Height = height;
             this.Width = width;
             this.map = new double[height, width];
+            this.maxHeight = maxHeight;
         }
 
         public void FillFlat(int constant = 0)
@@ -56,7 +58,7 @@ namespace PerlinLandscape
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    map[i, j] = noize.Generate(i, j);
+                    map[i, j] = noize.Generate(i, j) * maxHeight;
                 }
             }
         }

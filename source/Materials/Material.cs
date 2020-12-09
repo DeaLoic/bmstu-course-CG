@@ -27,6 +27,13 @@ namespace PerlinLandscape
             }
         }
 
+        public void Outrage(double percent, int seed)
+        {
+            Random random = new Random(seed);
+            colorReflect = new Vector3d(colorReflect.X / 100 * (100 + random.NextDouble() * percent * random.Next(-1, 1)),
+                                        colorReflect.Y / 100 * (100 + random.NextDouble() * percent * random.Next(-1, 1)),
+                                        colorReflect.Z / 100 * (100 + random.NextDouble() * percent * random.Next(-1, 1)));
+        }
         protected Vector3d ReflectFromColor(Color color)
         {
             return new Vector3d(color.R / 255.0, color.G / 255.0, color.B / 255.0);

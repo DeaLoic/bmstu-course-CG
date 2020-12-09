@@ -68,11 +68,13 @@ namespace PerlinLandscape
                     if (currentHeight > grassHeight)
                     {
                         polygons[currentPos].SetMaterial(new MaterialGrass());
+                        polygons[currentPos].Material.Outrage(5, (int)DateTime.UtcNow.Ticks * DateTime.UtcNow.Millisecond * (int)currentHeight);
                     }
                     if (currentHeight > waterHeight)
                     {
                         polygons[currentPos].SetMaterial(new WaterMaterial());
                     }
+
                     currentPos++;
                 }
             }

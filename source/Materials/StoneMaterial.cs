@@ -9,7 +9,7 @@ namespace PerlinLandscape
 {
     class StoneMaterial : Material
     {
-        public StoneMaterial() : base(0.7, 0.2)
+        public StoneMaterial() : base(0.6, 0.1)
         {
             colorReflect = ReflectFromColor(Color.DarkGray);
         }
