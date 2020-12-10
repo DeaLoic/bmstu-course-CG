@@ -58,15 +58,19 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lightToCamera = new System.Windows.Forms.Button();
             this.animation = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mapSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapLoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainCanvas
             // 
             this.mainCanvas.BackColor = System.Drawing.Color.Gray;
-            this.mainCanvas.Location = new System.Drawing.Point(2, 3);
+            this.mainCanvas.Location = new System.Drawing.Point(0, 27);
             this.mainCanvas.Name = "mainCanvas";
             this.mainCanvas.Size = new System.Drawing.Size(800, 600);
             this.mainCanvas.TabIndex = 0;
@@ -307,7 +311,7 @@
             this.groupBox1.Controls.Add(this.textMapSize);
             this.groupBox1.Controls.Add(this.textPerlinKnot);
             this.groupBox1.Controls.Add(this.generateButton);
-            this.groupBox1.Location = new System.Drawing.Point(807, 11);
+            this.groupBox1.Location = new System.Drawing.Point(805, 35);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(183, 112);
             this.groupBox1.TabIndex = 28;
@@ -321,7 +325,7 @@
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.updateButton);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Location = new System.Drawing.Point(809, 139);
+            this.groupBox2.Location = new System.Drawing.Point(807, 163);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(181, 117);
             this.groupBox2.TabIndex = 29;
@@ -330,7 +334,7 @@
             // 
             // lightToCamera
             // 
-            this.lightToCamera.Location = new System.Drawing.Point(814, 267);
+            this.lightToCamera.Location = new System.Drawing.Point(812, 291);
             this.lightToCamera.Name = "lightToCamera";
             this.lightToCamera.Size = new System.Drawing.Size(64, 36);
             this.lightToCamera.TabIndex = 30;
@@ -340,7 +344,7 @@
             // 
             // animation
             // 
-            this.animation.Location = new System.Drawing.Point(908, 269);
+            this.animation.Location = new System.Drawing.Point(906, 293);
             this.animation.Name = "animation";
             this.animation.Size = new System.Drawing.Size(66, 34);
             this.animation.TabIndex = 31;
@@ -348,12 +352,37 @@
             this.animation.UseVisualStyleBackColor = true;
             this.animation.Click += new System.EventHandler(this.animation_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mapSaveToolStripMenuItem,
+            this.mapLoadToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(999, 24);
+            this.menuStrip1.TabIndex = 32;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // mapSaveToolStripMenuItem
+            // 
+            this.mapSaveToolStripMenuItem.Name = "mapSaveToolStripMenuItem";
+            this.mapSaveToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.mapSaveToolStripMenuItem.Text = "Map save";
+            this.mapSaveToolStripMenuItem.Click += new System.EventHandler(this.mapSaveToolStripMenuItem_Click);
+            // 
+            // mapLoadToolStripMenuItem
+            // 
+            this.mapLoadToolStripMenuItem.Name = "mapLoadToolStripMenuItem";
+            this.mapLoadToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.mapLoadToolStripMenuItem.Text = "Map load";
+            this.mapLoadToolStripMenuItem.Click += new System.EventHandler(this.mapLoadToolStripMenuItem1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(999, 643);
+            this.ClientSize = new System.Drawing.Size(999, 680);
             this.Controls.Add(this.animation);
             this.Controls.Add(this.lightToCamera);
             this.Controls.Add(this.groupBox2);
@@ -374,6 +403,8 @@
             this.Controls.Add(this.textBoxXRotate);
             this.Controls.Add(this.buttonRotate);
             this.Controls.Add(this.mainCanvas);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).EndInit();
@@ -381,6 +412,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -418,6 +451,9 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button lightToCamera;
         private System.Windows.Forms.Button animation;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem mapSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mapLoadToolStripMenuItem;
     }
 }
 

@@ -10,8 +10,8 @@ namespace PerlinLandscape
 {
     class ZBuffer : DrawAlgorithm
     {
-        double[,] Zbuf = new double[0, 0];
 
+        double[,] Zbuf = new double[0, 0];
         public override void Process(Bitmap bitmap, Scene scene)
         {
             InitBuf(bitmap.Width, bitmap.Height, int.MaxValue);
@@ -28,6 +28,7 @@ namespace PerlinLandscape
                 Object transformedModel = m.Transform(mainMatrix);
                 ProcessModel(Zbuf, bitmap, transformedModel, mainMatrix, unTransformed, shader);
             }
+            Zbuf = new double[0, 0];
         }
         public override double GetZ(int x, int y)
         {
@@ -60,10 +61,10 @@ namespace PerlinLandscape
                 PollygonDraw polygon = frustum.Clip(pol);
                 polygon.Normilize();
                 polygon.CalculatePointsInside(image.Width, image.Height, -image.Width, -image.Height);
-                //draw = Shader.GetAnswerColor((pol.GetDots()[0].coeffColor + pol.GetDots()[1].coeffColor + pol.GetDots()[2].coeffColor + pol.GetDots()[3].coeffColor) / 4, pol.Material, shader.Color);
+                draw = pol.color;
                 foreach (Dot3d point in polygon.pointsInside)
                 {
-                    draw = Shader.GetAnswerColor(point.coeffColor, pol.Material, shader.Color);
+                    //draw = Shader.GetAnswerColor(point.coeffColor, pol.Material, shader.Color);
                     ProcessPoint(buffer, image, point, draw);
                 }
             }

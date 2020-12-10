@@ -13,15 +13,5 @@ namespace PerlinLandscape
         {
             this.coeffColor = coeffColor;
         }
-
-        public void AddInterpolatedValue(double value)
-        {
-            Array.Resize(ref interpolatedValues, interpolatedValues.Length + 1);
-            interpolatedValues[interpolatedValues.Length - 1] = value;
-        }
-        public double GetInterpolatedValue(int index)
-        {
-            return interpolatedValues[index];
-        }
     }
 }

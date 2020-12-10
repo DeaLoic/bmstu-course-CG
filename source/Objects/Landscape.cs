@@ -71,6 +71,11 @@ namespace PerlinLandscape
                     dots[i, j].coeffColor = shader.GetCoeffInDot(dots[i, j], dots[i, j].Normal);
                 }
             }
+
+            for (int i = 0; i < polygons.Length; i++)
+            {
+                polygons[i].color = shader.GetColorSimple(polygons[i]);
+            }
         }
 
         public override Object Transform(Matrix4x4 transformation)

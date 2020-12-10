@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -41,12 +42,15 @@ namespace PerlinLandscape
             countOfGridKnot = Convert.ToInt32(textPerlinKnot.Text);
             sizeMap = Convert.ToInt32(textMapSize.Text);
 
+
             noize = new Perlin2d(countOfGridKnot, countOfGridKnot, 0, sizeMap);
+            heightMap = new HeightMap(sizeMap, sizeMap);
+            heightMap.Generate(noize);
+
             Perlin2d noizeNoize = new Perlin2d(countOfGridKnot + 4, countOfGridKnot + 4, 0, sizeMap);
-            heightMap = new HeightMap(noize, sizeMap, sizeMap);
-            heightMap.Generate();
-            HeightMap heightMapNoize = new HeightMap(noizeNoize, sizeMap, sizeMap, 0.1);
-            heightMapNoize.Generate();
+            HeightMap heightMapNoize = new HeightMap(sizeMap, sizeMap, 0.1);
+            heightMapNoize.Generate(noizeNoize);
+
             for (int i = 0; i < heightMap.Width; i++)
             {
                 for (int j = 0; j < heightMap.Height; j++)
@@ -54,6 +58,8 @@ namespace PerlinLandscape
                     heightMap[i, j] += heightMapNoize[i, j];
                 }
             }
+
+            heightMap.Normilize();
 
             UpdateLandscape();
             //scene.AddObject(new Cube(300));
@@ -127,7 +133,7 @@ namespace PerlinLandscape
 
         private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            coordinatesLabel.Text = String.Format("( {0}, {1}, {2} )", e.Location.X, e.Location.Y, drawer.GetZ(e.Location.Y, e.Location.X));
+            coordinatesLabel.Text = String.Format("( {0}, {1} )", e.Location.X, e.Location.Y);
             if (isMoving)
             {
                 Point lastMove = e.Location;
@@ -178,6 +184,56 @@ namespace PerlinLandscape
             }
             });
             thread.Start();
+        }
+
+        private void mapSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+            saveFileDialog.Filter = "*.png|*.png";
+            saveFileDialog.FilterIndex = 0;
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap myBitmap = new Bitmap(heightMap.Width, heightMap.Height);
+                for (int i = 0; i < heightMap.Width; i++)
+                {
+                    for (int j = 0; j < heightMap.Height; j++)
+                    {
+                        myBitmap.SetPixel(i, j, Color.FromArgb((int)(heightMap[i, j] * 255), (int)(heightMap[i, j] * 255), (int)(heightMap[i, j] * 255)));
+                    }
+                }
+                myBitmap.Save(saveFileDialog.OpenFile(), ImageFormat.Png);
+            }
+        }
+
+        private void mapLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+            openFileDialog.Filter = "*.png|*.png";// "*.png|*.txt";
+            openFileDialog.FilterIndex = 0;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                Bitmap myBitmap = new Bitmap(selectedFileName);
+                heightMap = new HeightMap(myBitmap.Width, myBitmap.Height);
+                for (int i = 0; i < heightMap.Width; i++)
+                {
+                    for (int j = 0; j < heightMap.Height; j++)
+                    {
+                        heightMap[i, j] = myBitmap.GetPixel(i, j).R / 255.0;
+                    }
+                }
+                heightMap.Normilize();
+                UpdateLandscape();
+                UpdateBitmap(scene);
+            }
         }
     }
 }

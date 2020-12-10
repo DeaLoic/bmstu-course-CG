@@ -11,8 +11,7 @@ namespace PerlinLandscape
         public int Height { get; }
         public int Width { get; }
 
-        Noize noize;
-        double maxHeight;
+        public double maxHeight;
 
         double[,] map;
         public double this[int i, int j]
@@ -21,9 +20,8 @@ namespace PerlinLandscape
             set => map[i, j] = value;
         }
 
-        public HeightMap(Noize noize, int height = 100, int width = 100, double maxHeight = 1)
+        public HeightMap(int height = 100, int width = 100, double maxHeight = 1)
         {
-            this.noize = noize;
             this.Height = height;
             this.Width = width;
             this.map = new double[height, width];
@@ -52,13 +50,45 @@ namespace PerlinLandscape
             }
         }
 
-        public void Generate()
+        public void Generate(Noize noize)
         {
             for (int i = 0; i < Width; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
                     map[i, j] = noize.Generate(i, j) * maxHeight;
+                }
+            }
+        }
+
+        public void Normilize()
+        {
+            double max = -100;
+            double min = 100;
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    if (map[i, j] > max)
+                    {
+                        max = map[i, j];
+                    }
+                    if (map[i, j] < min)
+                    {
+                        min = map[i, j];
+                    }
+                }
+            }
+            if (max > 1 || min < 0)
+            {
+                double acc = 1 / (max - min);
+                for (int i = 0; i < Width; i++)
+                {
+                    for (int j = 0; j < Height; j++)
+                    {
+                        map[i, j] = (map[i, j] - min) * acc;
+                        map[i, j] = map[i, j] > 1 ? 1 : (map[i, j] < 0 ? 0 : map[i, j]);
+                    }
                 }
             }
         }
