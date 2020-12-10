@@ -9,18 +9,11 @@ namespace PerlinLandscape
     class Perlin2d : Noize
     {
         private Vector3d[,] grid;
-        private Vector3d[] availableGradients;
         private Random random = new Random((int)DateTime.UtcNow.Ticks);
         private double stepX;
         private double stepY;
         public Perlin2d(int width, int height, int minReal, int maxReal)
         {
-            availableGradients = new Vector3d[] {
-                                new Vector3d(1, 0),
-                                new Vector3d(-1, 0),
-                                new Vector3d(0, 1),
-                                new Vector3d(0, -1)
-                                };
             grid = new Vector3d[width + 1, height + 1];
             double angle;
             for (var i = 0; i < width + 1; i++)

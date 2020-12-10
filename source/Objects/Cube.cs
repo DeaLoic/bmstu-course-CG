@@ -34,6 +34,10 @@ namespace PerlinLandscape
             centralDot = new Dot3d(A.X / 2, A.Y / 2, A.Z / 2);
         }
 
+        public override void Normilize()
+        {
+            throw new NotImplementedException();
+        }
         public override PollygonDraw[] GetPollygonsDraw()
         {
             return polygons;

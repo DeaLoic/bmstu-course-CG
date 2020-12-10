@@ -18,7 +18,7 @@ namespace PerlinLandscape
             int num = dotsCut.Length;
             if (dots.Length > 2 && num >= 2)
             {
-                Dot3d p1, p2, tmp;
+                Dot3d p1, p2;
                 double t1, t2;
                 double k;
 
@@ -43,16 +43,19 @@ namespace PerlinLandscape
                     if (((t1 > 0) && (t2 < 0)) ||
                         ((t2 >= 0) && (t1 < 0)))
                     {
-                        k = 1 - t2 / (t2 - t1);
+                        k = 1 - (t2 / (t2 - t1));
                         if (fill == result.Length)
                         {
                             Array.Resize(ref result, (int)(fill * 1.5));
                         }
-                        result[fill] = new Dot3d(p1.X + k * (p2.X - p1.X), p1.Y + k * (p2.Y - p1.Y), p1.Z + k * (p2.Z - p1.Z), normal: p1.Normal + (((p2.Normal + p1.Normal).Normalized()) * k));
+                        result[fill] = new Dot3d(p1.X + k * (p2.X - p1.X), p1.Y + k * (p2.Y - p1.Y), p1.Z + k * (p2.Z - p1.Z), normal: p1.Normal + ((p2.Normal + p1.Normal).Normalized() * k));
                         fill++;
                     }
                 }
-                Array.Resize(ref result, fill);
+                if (fill != result.Length)
+                {
+                    Array.Resize(ref result, fill);
+                }
             }
 
             return new PollygonDraw(result);

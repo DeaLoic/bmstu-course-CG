@@ -29,7 +29,9 @@ namespace PerlinLandscape
 
         bool isMoving = false;
         Point firstMove;
-        int cameraSpeed = 10;
+        int cameraSens = 20;
+        int cameraSpeed = 5;
+
         public MainForm()
         {
             InitializeComponent();
@@ -107,7 +109,6 @@ namespace PerlinLandscape
 
         private void button4_Click(object sender, EventArgs e)
         {
-            scene.camera.Scale(2);
             UpdateBitmap(scene);
         }
 
@@ -137,16 +138,20 @@ namespace PerlinLandscape
             if (isMoving)
             {
                 Point lastMove = e.Location;
-                scene.camera.Rotate(-(lastMove.Y - firstMove.Y) / cameraSpeed, (lastMove.X - firstMove.X) / cameraSpeed, 0);
-                if ((lastMove.Y - firstMove.Y) / cameraSpeed != 0)
+                if (((lastMove.Y - firstMove.Y) / cameraSens != 0) || ((lastMove.X - firstMove.X) / cameraSens != 0))
+                {
+                    scene.camera.Rotate(-(lastMove.Y - firstMove.Y) / cameraSens * cameraSpeed, (lastMove.X - firstMove.X) / cameraSens * cameraSpeed, 0);
+                    UpdateBitmap(scene);
+                }
+                if ((lastMove.Y - firstMove.Y) / cameraSens != 0)
                 {
                     firstMove.Y = lastMove.Y;
                 }
-                if ((lastMove.X - firstMove.X) / cameraSpeed != 0)
+                if ((lastMove.X - firstMove.X) / cameraSens != 0)
                 {
                     firstMove.X = lastMove.X;
                 }
-                UpdateBitmap(scene);
+
             }
         }
 

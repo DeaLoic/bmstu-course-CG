@@ -34,16 +34,16 @@ namespace PerlinLandscape
             {
                 for (int i = 2; i < dots.Length; i += 1)
                 {
-                    List<Dot3d> triangle = new List<Dot3d>();
-                    triangle.Add(dots[0]);
-                    triangle.Add(dots[i - 1]);
-                    triangle.Add(dots[i]);
+                    Dot3d[] triangle = new Dot3d[3];
+                    triangle[0] = (dots[0]);
+                    triangle[1] = (dots[i - 1]);
+                    triangle[2] = (dots[i]);
                     CalculatePointsInsideTriangle(triangle, maxX, maxY, minX, minY);
                 }
             }
         }
 
-        private void CalculatePointsInsideTriangle(List<Dot3d> v, int lastXPossible, int lastYPossible, int firstXPossible = 0, int firstYPossible = 0)
+        private void CalculatePointsInsideTriangle(Dot3d[] v, int lastXPossible, int lastYPossible, int firstXPossible = 0, int firstYPossible = 0)
         {
             double yMax, yMin;
             double[] x = new double[3], y = new double[3];
@@ -52,9 +52,9 @@ namespace PerlinLandscape
 
             for (int i = 0; i < 3; i++)
             {
-                x[i] = (v[i].X / v[i].W);
-                y[i] = (v[i].Y / v[i].W);
-                z[i] = (v[i].Z / v[i].W);
+                x[i] = (v[i].X);
+                y[i] = (v[i].Y);
+                z[i] = (v[i].Z);
                 c[i] = v[i].coeffColor;
             }
 

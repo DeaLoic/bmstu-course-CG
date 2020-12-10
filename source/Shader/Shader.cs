@@ -30,7 +30,7 @@ namespace PerlinLandscape
             Vector3d coeffs = new Vector3d();
             foreach (Dot3d dot in pollygon.GetDots())
             {
-                coeffs = coeffs + GetCoeffInDot(dot, normal);
+                coeffs = coeffs + GetCoeffInDot(dot);
             }
             coeffs = coeffs / pollygon.Size;
             Color ambientColor = MulltiplyColor(coeffs.X, Color.White);
@@ -40,14 +40,14 @@ namespace PerlinLandscape
             return Add(MulltiplyColor(pollygon.Material.ColorReflect, Add(ambientColor, diffuse)), specular);
         }
 
-        public Vector3d GetCoeffInDot(Dot3d dot, Vector3d normal)
+        public Vector3d GetCoeffInDot(Dot3d dot)
         {
             Vector3d lightVector = new Vector3d(light.Place - dot).Normalized();
             lightVector.Normalize();
             Vector3d H = (lightVector + new Vector3d(viewer - dot).Normalized());
             H.Normalize();
-            double diffuse = Math.Max(0, (lightVector).DotProduct(normal));
-            double specular = Math.Pow(Math.Max(0, (H).DotProduct(normal)), specularPower);
+            double diffuse = Math.Max(0, (lightVector).DotProduct(dot.Normal));
+            double specular = Math.Pow(Math.Max(0, (H).DotProduct(dot.Normal)), specularPower);
 
             return new Vector3d(ambient, diffuse, specular);
         }

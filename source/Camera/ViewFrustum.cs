@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,8 +36,8 @@ namespace PerlinLandscape
 
             Vector3d offsetVec = new Vector3d(center);
             Vector3d nearBase = offsetVec + lookVector * nearDistance;
-            Vector3d nearUp = up * (nearDistance * tanHeight);
-            Vector3d nearRight = widthVec * (nearDistance * tanWidth);
+            Vector3d nearUp = up * (nearDistance * tanHeight + 10);
+            Vector3d nearRight = widthVec * (nearDistance * tanWidth + 10);
             A = (Dot3d)(nearBase + nearUp - nearRight).ToDot();
             B = (Dot3d)(nearBase + nearUp + nearRight).ToDot();
             C = (Dot3d)(nearBase - nearUp + nearRight).ToDot();
@@ -91,28 +92,29 @@ namespace PerlinLandscape
 
         public PollygonDraw Clip(PollygonDraw pollygon)
         {
-            PollygonDraw result = new PollygonDraw(pollygon.GetDots());
-            result = near.Clip(pollygon);
+            PollygonDraw result = near.Clip(pollygon);
+            
             if (result.Size > 0)
             {
                 result = far.Clip(result);
             }
-            if (result.Size > 0)
+            if (result.Size > 2)
             {
                 result = left.Clip(result);
             }
-            if (result.Size > 0)
+            if (result.Size > 2)
             {
                 result = right.Clip(result);
             }
-            if (result.Size > 0)
+            if (result.Size > 2)
             {
                 result = upper.Clip(result);
             }
-            if (result.Size > 0)
+            if (result.Size > 2)
             {
                 result = under.Clip(result);
             }
+            
             return result;
         }
     }

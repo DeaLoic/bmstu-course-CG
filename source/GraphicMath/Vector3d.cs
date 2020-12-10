@@ -53,7 +53,7 @@ namespace PerlinLandscape
             this.y = y / Length;
             this.z = z / Length;
             this.w = 1;
-            CountLenght();
+            length = 1;
         }
         public Vector3d Copy()
         {
