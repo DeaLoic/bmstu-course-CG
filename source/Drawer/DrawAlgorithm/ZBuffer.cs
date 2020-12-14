@@ -14,11 +14,12 @@ namespace PerlinLandscape
     {
 
         double[][] Zbuf = new double[0][];
+        Stopwatch clock = new Stopwatch();
+        long timeDraw = 0;
         public override void Process(Bitmap bitmap, Scene scene)
         {
             long time, timeInit, timeGet, timeColor, timeTransform, timeProcess, timeNormilize;
             double timeMS;
-            Stopwatch clock = new Stopwatch();
 
             clock.Restart();
             InitBuf(bitmap.Width, bitmap.Height, double.MaxValue);
@@ -35,6 +36,7 @@ namespace PerlinLandscape
 
             foreach (Object m in scene.GetObjects())
             {
+                timeDraw = 0;
                 clock.Restart();
                 m.Colorize(shader, shader.isPolygonColorized);
                 clock.Stop();
@@ -51,15 +53,16 @@ namespace PerlinLandscape
                 timeNormilize = clock.Elapsed.Ticks;
                 transformedModel.SetShift(398, 298, 0);
 
-                clock.Restart();
+                Stopwatch clock1 = new Stopwatch();
+                clock1.Restart();
                 ProcessModel(bitmap, transformedModel, mainMatrix, unTransformed, shader);
-                clock.Stop();
-                timeProcess = clock.Elapsed.Ticks;
+                clock1.Stop();
+                timeProcess = clock1.Elapsed.Ticks;
                 time = timeColor + timeGet + timeInit + timeProcess + timeTransform + timeNormilize;
-                timeMS = time / 10000.0;
+                timeMS = timeDraw / 10000.0;
                 Console.Write(timeMS);
                 Console.Write("  ");
-                Console.Write(timeColor / 10000.0);
+                Console.Write(time / 10000.0);
                 Console.Write("  ");
                 Console.Write(timeProcess / 10000.0);
                 Console.WriteLine("  ");
@@ -95,10 +98,9 @@ namespace PerlinLandscape
             }
         }
 
-        private void ProcessPolygon(object paramsObj)
+        /*
+        private void ProcessPolygon(Bitmap image, Object o, Matrix4x4 mainMatrix, ViewFrustum frustum, Shader shader)
         {
-            ParametersForPolygon paramses = (ParametersForPolygon)paramsObj;
-            Cutter window = new Cutter(new Dot3d[] { new Dot3d(0, 0, -100), new Dot3d(798, 0, -100), new Dot3d(798, 598, -100), new Dot3d(0, 598, -100) });
             for (int i = paramses.polStart; i < paramses.polEnd; i++)
             {
                 PollygonDraw polygon = window.Clip(paramses.pollygons[i]);
@@ -116,49 +118,52 @@ namespace PerlinLandscape
                     {
                         draw = Shader.GetAnswerColor(point.coeffColor, paramses.pollygons[i].Material, paramses.shader.Color);
                     }
-                    ProcessPoint(paramses.image, point, draw, paramses.mutex);
+                    ProcessPoint(paramses.image, point, draw);
                 }
             }
         }
+        */
 
         private void ProcessModel(Bitmap image, Object o, Matrix4x4 mainMatrix, ViewFrustum frustum, Shader shader)
         {
             Color draw;
-            Stopwatch clock = new Stopwatch();
-            long timeClip = 0, timeNormilize, timeCalculate, timeDraw, time;
-            double timeMS = 0;
+            Cutter window = new Cutter(new Dot3d[] { new Dot3d(0, 0, -100), new Dot3d(798, 0, -100), new Dot3d(798, 598, -100), new Dot3d(0, 598, -100) });
 
-            PollygonDraw[] polygons = o.GetPollygonsDraw();
-            Thread[] threads = new Thread[1];
-            Mutex mutex = new Mutex();
-            int step = polygons.Length / 1;
-            int polStart = 0;
-            for (int i = 0; i < 0; i++)
+            foreach (PollygonDraw pol in o.GetPollygonsDraw())
             {
-                threads[i] = new Thread(ProcessPolygon);
-                threads[i].Start(new ParametersForPolygon(image, polygons, polStart, polStart + step, shader, mutex));
-                polStart += step;
-            }
-            threads[0] = new Thread(ProcessPolygon);
-            threads[0].Start(new ParametersForPolygon(image, polygons, polStart, polygons.Length, shader, mutex));
-            for (int i = 0; i < 1; i++)
-            {
-                threads[i].Join();
+                PollygonDraw polygon = window.Clip(pol);
+                if (polygon.Size < 3)
+                {
+                    return;
+                }
+                polygon.CalculatePointsInside(798, 598);
+
+                draw = pol.color;
+
+                foreach (Dot3d point in polygon.pointsInside)
+                {
+                    if (!shader.isPolygonColorized)
+                    {
+                        draw = Shader.GetAnswerColor(point.coeffColor, pol.Material, shader.Color);
+                    }
+                    ProcessPoint(image, point, draw);
+                }
             }
         }
 
-        private void ProcessPoint(Bitmap image, Dot3d point, Color color, Mutex mutex)
+        private void ProcessPoint(Bitmap image, Dot3d point, Color color)
         {
             int x = (int)point.X;
             int y = (int)point.Y;
 
-            mutex.WaitOne();
             if (point.Z <= Zbuf[y][x])
             {
                 Zbuf[y][x] = point.Z;
+                clock.Restart();
                 image.SetPixel(x, y, color);
+                clock.Stop();
+                timeDraw += clock.Elapsed.Ticks;
             }
-            mutex.ReleaseMutex();
         }
     }
 }
