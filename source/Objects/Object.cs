@@ -18,7 +18,8 @@ namespace PerlinLandscape
             this.isVisible = isVisible;
         }
         public abstract Object Transform(Matrix4x4 transformation);
-        public abstract void Colorize(Shader shader);
+        public abstract void SetShift(double x, double y, double z);
+        public abstract void Colorize(Shader shader, bool isPolygonColorized = true);
         public abstract PollygonDraw[] GetPollygonsDraw();
         public abstract void Normilize();
     }

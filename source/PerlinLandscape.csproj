@@ -66,6 +66,8 @@
     <Compile Include="Materials\SandMaterial.cs" />
     <Compile Include="Materials\StoneMaterial.cs" />
     <Compile Include="Materials\WaterMaterial.cs" />
+    <Compile Include="ParametersForThreading\ParametersForInitZBuff.cs" />
+    <Compile Include="ParametersForThreading\ParametersForPolygon.cs" />
     <Compile Include="Primitives\DotDraw.cs" />
     <Compile Include="Shader\LightSource.cs" />
     <Compile Include="Objects\Cube.cs" />

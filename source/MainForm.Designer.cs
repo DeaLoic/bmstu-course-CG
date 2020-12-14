@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.mainCanvas = new System.Windows.Forms.PictureBox();
-            this.generateButton = new System.Windows.Forms.Button();
             this.updateButton = new System.Windows.Forms.Button();
             this.buttonRotate = new System.Windows.Forms.Button();
             this.textBoxXRotate = new System.Windows.Forms.TextBox();
@@ -50,21 +49,32 @@
             this.textPolygonStep = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.textMaxHeight = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textPerlinKnot = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textMapSize = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lightToCamera = new System.Windows.Forms.Button();
             this.animation = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mapSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapLoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.generateButton = new System.Windows.Forms.Button();
+            this.textPerlinKnot = new System.Windows.Forms.TextBox();
+            this.textMapSize = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.buttonAdditionalPerlin = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBoxPerlinAdditional = new System.Windows.Forms.TextBox();
+            this.textBoxAdditionalDeviation = new System.Windows.Forms.TextBox();
+            this.buttonColorized = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainCanvas
@@ -78,16 +88,6 @@
             this.mainCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseDown);
             this.mainCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseMove);
             this.mainCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainCanvas_MouseUp);
-            // 
-            // generateButton
-            // 
-            this.generateButton.Location = new System.Drawing.Point(56, 70);
-            this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(63, 36);
-            this.generateButton.TabIndex = 1;
-            this.generateButton.Text = "Generate";
-            this.generateButton.UseVisualStyleBackColor = true;
-            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 
             // updateButton
             // 
@@ -270,54 +270,6 @@
             this.textMaxHeight.TabIndex = 22;
             this.textMaxHeight.Text = "100";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 22);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(114, 13);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "Узлы сетки Перлина";
-            // 
-            // textPerlinKnot
-            // 
-            this.textPerlinKnot.Location = new System.Drawing.Point(144, 19);
-            this.textPerlinKnot.Name = "textPerlinKnot";
-            this.textPerlinKnot.Size = new System.Drawing.Size(33, 20);
-            this.textPerlinKnot.TabIndex = 24;
-            this.textPerlinKnot.Text = "2";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 48);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 13);
-            this.label7.TabIndex = 27;
-            this.label7.Text = "Размер карты";
-            // 
-            // textMapSize
-            // 
-            this.textMapSize.Location = new System.Drawing.Point(144, 45);
-            this.textMapSize.Name = "textMapSize";
-            this.textMapSize.Size = new System.Drawing.Size(33, 20);
-            this.textMapSize.TabIndex = 26;
-            this.textMapSize.Text = "300";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.textMapSize);
-            this.groupBox1.Controls.Add(this.textPerlinKnot);
-            this.groupBox1.Controls.Add(this.generateButton);
-            this.groupBox1.Location = new System.Drawing.Point(805, 35);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 112);
-            this.groupBox1.TabIndex = 28;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Generate";
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textMaxHeight);
@@ -334,9 +286,9 @@
             // 
             // lightToCamera
             // 
-            this.lightToCamera.Location = new System.Drawing.Point(812, 291);
+            this.lightToCamera.Location = new System.Drawing.Point(807, 286);
             this.lightToCamera.Name = "lightToCamera";
-            this.lightToCamera.Size = new System.Drawing.Size(64, 36);
+            this.lightToCamera.Size = new System.Drawing.Size(74, 34);
             this.lightToCamera.TabIndex = 30;
             this.lightToCamera.Text = "Fix light at camera";
             this.lightToCamera.UseVisualStyleBackColor = true;
@@ -344,9 +296,9 @@
             // 
             // animation
             // 
-            this.animation.Location = new System.Drawing.Point(906, 293);
+            this.animation.Location = new System.Drawing.Point(908, 286);
             this.animation.Name = "animation";
-            this.animation.Size = new System.Drawing.Size(66, 34);
+            this.animation.Size = new System.Drawing.Size(74, 34);
             this.animation.TabIndex = 31;
             this.animation.Text = "Launch animation";
             this.animation.UseVisualStyleBackColor = true;
@@ -377,16 +329,155 @@
             this.mapLoadToolStripMenuItem.Text = "Map load";
             this.mapLoadToolStripMenuItem.Click += new System.EventHandler(this.mapLoadToolStripMenuItem1_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(806, 27);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(192, 136);
+            this.tabControl1.TabIndex = 33;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.Gray;
+            this.tabPage1.Controls.Add(this.label7);
+            this.tabPage1.Controls.Add(this.textPerlinKnot);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.generateButton);
+            this.tabPage1.Controls.Add(this.textMapSize);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(184, 110);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Генерация";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.Gray;
+            this.tabPage2.Controls.Add(this.textBoxPerlinAdditional);
+            this.tabPage2.Controls.Add(this.textBoxAdditionalDeviation);
+            this.tabPage2.Controls.Add(this.label9);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.buttonAdditionalPerlin);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(184, 110);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Изменение";
+            // 
+            // generateButton
+            // 
+            this.generateButton.Location = new System.Drawing.Point(64, 68);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(63, 36);
+            this.generateButton.TabIndex = 1;
+            this.generateButton.Text = "Generate";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            // 
+            // textPerlinKnot
+            // 
+            this.textPerlinKnot.Location = new System.Drawing.Point(145, 10);
+            this.textPerlinKnot.Name = "textPerlinKnot";
+            this.textPerlinKnot.Size = new System.Drawing.Size(33, 20);
+            this.textPerlinKnot.TabIndex = 24;
+            this.textPerlinKnot.Text = "2";
+            // 
+            // textMapSize
+            // 
+            this.textMapSize.Location = new System.Drawing.Point(145, 36);
+            this.textMapSize.Name = "textMapSize";
+            this.textMapSize.Size = new System.Drawing.Size(33, 20);
+            this.textMapSize.TabIndex = 26;
+            this.textMapSize.Text = "300";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 13);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(114, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Узлы сетки Перлина";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 39);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(80, 13);
+            this.label7.TabIndex = 27;
+            this.label7.Text = "Размер карты";
+            // 
+            // buttonAdditionalPerlin
+            // 
+            this.buttonAdditionalPerlin.Location = new System.Drawing.Point(64, 68);
+            this.buttonAdditionalPerlin.Name = "buttonAdditionalPerlin";
+            this.buttonAdditionalPerlin.Size = new System.Drawing.Size(63, 36);
+            this.buttonAdditionalPerlin.TabIndex = 34;
+            this.buttonAdditionalPerlin.Text = "Add grid";
+            this.buttonAdditionalPerlin.UseVisualStyleBackColor = true;
+            this.buttonAdditionalPerlin.Click += new System.EventHandler(this.buttonAdditionalPerlin_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 12);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(114, 13);
+            this.label8.TabIndex = 35;
+            this.label8.Text = "Узлы сетки Перлина";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 39);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(120, 13);
+            this.label9.TabIndex = 36;
+            this.label9.Text = "Вносимое отклонение";
+            // 
+            // textBoxPerlinAdditional
+            // 
+            this.textBoxPerlinAdditional.Location = new System.Drawing.Point(145, 9);
+            this.textBoxPerlinAdditional.Name = "textBoxPerlinAdditional";
+            this.textBoxPerlinAdditional.Size = new System.Drawing.Size(33, 20);
+            this.textBoxPerlinAdditional.TabIndex = 34;
+            this.textBoxPerlinAdditional.Text = "2";
+            // 
+            // textBoxAdditionalDeviation
+            // 
+            this.textBoxAdditionalDeviation.Location = new System.Drawing.Point(145, 35);
+            this.textBoxAdditionalDeviation.Name = "textBoxAdditionalDeviation";
+            this.textBoxAdditionalDeviation.Size = new System.Drawing.Size(33, 20);
+            this.textBoxAdditionalDeviation.TabIndex = 35;
+            this.textBoxAdditionalDeviation.Text = "0.1";
+            // 
+            // buttonColorized
+            // 
+            this.buttonColorized.Location = new System.Drawing.Point(856, 326);
+            this.buttonColorized.Name = "buttonColorized";
+            this.buttonColorized.Size = new System.Drawing.Size(74, 34);
+            this.buttonColorized.TabIndex = 34;
+            this.buttonColorized.Text = "Изменение закраски";
+            this.buttonColorized.UseVisualStyleBackColor = true;
+            this.buttonColorized.Click += new System.EventHandler(this.buttonColorized_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(999, 680);
+            this.Controls.Add(this.buttonColorized);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.animation);
             this.Controls.Add(this.lightToCamera);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.coordinatesLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
@@ -408,12 +499,15 @@
             this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -422,7 +516,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox mainCanvas;
-        private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.Button buttonRotate;
         private System.Windows.Forms.TextBox textBoxXRotate;
@@ -443,17 +536,26 @@
         private System.Windows.Forms.TextBox textPolygonStep;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textMaxHeight;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textPerlinKnot;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textMapSize;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button lightToCamera;
         private System.Windows.Forms.Button animation;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mapSaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapLoadToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textPerlinKnot;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button generateButton;
+        private System.Windows.Forms.TextBox textMapSize;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox textBoxPerlinAdditional;
+        private System.Windows.Forms.TextBox textBoxAdditionalDeviation;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button buttonAdditionalPerlin;
+        private System.Windows.Forms.Button buttonColorized;
     }
 }
 

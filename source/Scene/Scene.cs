@@ -13,6 +13,7 @@ namespace PerlinLandscape
         Object[] objects = new Object[0];
         public Camera camera = new Camera(new Dot3d(0, 0, -350));
         public LightSource lightSource = new LightSource(new Dot3d(), new Vector3d(0, 0, -1), Color.White);
+        public bool isPolygonColorized = false;
 
         public Scene(){}
 

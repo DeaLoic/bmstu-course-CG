@@ -48,19 +48,6 @@ namespace PerlinLandscape
             noize = new Perlin2d(countOfGridKnot, countOfGridKnot, 0, sizeMap);
             heightMap = new HeightMap(sizeMap, sizeMap);
             heightMap.Generate(noize);
-
-            Perlin2d noizeNoize = new Perlin2d(countOfGridKnot + 4, countOfGridKnot + 4, 0, sizeMap);
-            HeightMap heightMapNoize = new HeightMap(sizeMap, sizeMap, 0.1);
-            heightMapNoize.Generate(noizeNoize);
-
-            for (int i = 0; i < heightMap.Width; i++)
-            {
-                for (int j = 0; j < heightMap.Height; j++)
-                {
-                    heightMap[i, j] += heightMapNoize[i, j];
-                }
-            }
-
             heightMap.Normilize();
 
             UpdateLandscape();
@@ -239,6 +226,30 @@ namespace PerlinLandscape
                 UpdateLandscape();
                 UpdateBitmap(scene);
             }
+        }
+
+        private void buttonAdditionalPerlin_Click(object sender, EventArgs e)
+        {
+            int gridAdditional = Convert.ToInt32(textBoxPerlinAdditional.Text);
+            double deviation = Convert.ToDouble(textBoxAdditionalDeviation.Text.Replace('.', ','));
+            Perlin2d noizeNoize = new Perlin2d(gridAdditional, gridAdditional, 0, sizeMap);
+            HeightMap heightMapNoize = new HeightMap(sizeMap, sizeMap, deviation);
+            heightMapNoize.Generate(noizeNoize);
+
+            for (int i = 0; i < heightMap.Width; i++)
+            {
+                for (int j = 0; j < heightMap.Height; j++)
+                {
+                    heightMap[i, j] += heightMapNoize[i, j];
+                }
+            }
+            UpdateLandscape();
+            UpdateBitmap(scene);
+        }
+
+        private void buttonColorized_Click(object sender, EventArgs e)
+        {
+            scene.isPolygonColorized = !scene.isPolygonColorized;
         }
     }
 }

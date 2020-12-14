@@ -70,19 +70,34 @@ namespace PerlinLandscape
             }
         }
 
-        public override void Colorize(Shader shader)
+        public override void SetShift(double x, double y, double z = 0)
         {
-            for (int i = 0; i < (heightMap.Width); i += step)
+            foreach (Dot3d dot in dots)
             {
-                for (int j = 0; j < (heightMap.Height); j += step)
+                dot.X += x;
+                dot.Y += y;
+                dot.Z += z;
+            }
+        }
+
+        public override void Colorize(Shader shader, bool isPolygonColorized = true)
+        {
+            if (!isPolygonColorized)
+            {
+                for (int i = 0; i < (heightMap.Width); i += step)
                 {
-                    dots[i, j].coeffColor = shader.GetCoeffInDot(dots[i, j]);
+                    for (int j = 0; j < (heightMap.Height); j += step)
+                    {
+                        dots[i, j].coeffColor = shader.GetCoeffInDot(dots[i, j]);
+                    }
                 }
             }
-
-            for (int i = 0; i < polygons.Length; i++)
+            else
             {
-                polygons[i].color = shader.GetColorSimple(polygons[i]);
+                for (int i = 0; i < polygons.Length; i++)
+                {
+                    polygons[i].color = shader.GetColorSimple(polygons[i]);
+                }
             }
         }
 

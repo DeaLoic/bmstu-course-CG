@@ -13,6 +13,7 @@ namespace PerlinLandscape
         Dot3d viewer;
         double ambient;
         double specularPower = 1;
+        public bool isPolygonColorized = false;
 
         public Color Color { get => light.Color; }
         public Shader(LightSource lightSource, Dot3d viewerPlace, double ambientCoeff = 0.1, double specularPower = 1)

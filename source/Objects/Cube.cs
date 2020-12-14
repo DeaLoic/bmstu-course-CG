@@ -47,7 +47,12 @@ namespace PerlinLandscape
             throw new NotImplementedException();
         }
 
-        public override void Colorize(Shader shader)
+        public override void Colorize(Shader shader, bool isPolygonColorized = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetShift(double x, double y, double z)
         {
             throw new NotImplementedException();
         }
