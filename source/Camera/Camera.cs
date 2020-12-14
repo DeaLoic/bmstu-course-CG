@@ -49,6 +49,10 @@ namespace PerlinLandscape
                 zaxis = new Vector3d(0, 0, -1);
             }
             Vector3d xaxis = up.Cross(zaxis).Normalized();
+            if (xaxis.Length == 0)
+            {
+                xaxis = new Vector3d(1, 0, 0);
+            }
             Vector3d yaxis = zaxis.Cross(xaxis).Normalized();
 
             Matrix4x4 matrix = new Matrix4x4();
@@ -63,7 +67,15 @@ namespace PerlinLandscape
         public void Move(Vector3d move)
         {
             Vector3d zaxis = (lookAt - place).Normalized();
+            if (zaxis.Length == 0)
+            {
+                zaxis = new Vector3d(0, 0, -1);
+            }
             Vector3d xaxis = up.Cross(zaxis).Normalized();
+            if (xaxis.Length == 0)
+            {
+                xaxis = new Vector3d(1, 0, 0);
+            }
             Vector3d yaxis = zaxis.Cross(xaxis).Normalized();
 
             place = place + (zaxis * move.Z + xaxis * move.X + yaxis * move.Y);
@@ -74,7 +86,15 @@ namespace PerlinLandscape
         {
             var transform = new Matrix4x4();
             Vector3d zaxis = (lookAt - place).Normalized();
+            if (zaxis.Length == 0)
+            {
+                zaxis = new Vector3d(0, 0, -1);
+            }
             Vector3d xaxis = up.Cross(zaxis).Normalized();
+            if (xaxis.Length == 0)
+            {
+                xaxis = new Vector3d(1, 0, 0);
+            }
             Vector3d yaxis = zaxis.Cross(xaxis).Normalized();
 
             transform.SetRotateAxis(ox, 0, oz, xaxis, yaxis, zaxis);

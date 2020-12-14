@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -64,12 +65,13 @@ namespace PerlinLandscape
             scene.camera.SetLookAtDot(landscape.CentralDot);
         }
 
-        private void UpdateBitmap(Scene scene)
+        private double UpdateBitmap(Scene scene)
         {
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
 
-            drawer.Draw(bitmap, scene);
+            double res = drawer.Draw(bitmap, scene);
             mainCanvas.Image = bitmap;
+            return res;
         }
 
         private void update_Click(object sender, EventArgs e)
@@ -194,7 +196,9 @@ namespace PerlinLandscape
                 {
                     for (int j = 0; j < heightMap.Height; j++)
                     {
-                        myBitmap.SetPixel(i, j, Color.FromArgb((int)(heightMap[i, j] * 255), (int)(heightMap[i, j] * 255), (int)(heightMap[i, j] * 255)));
+                        myBitmap.SetPixel(i, j, Color.FromArgb((int)(heightMap[i, j] * 255) > 255 ? 255 : (int)(heightMap[i, j] * 255),
+                                                               (int)(heightMap[i, j] * 255) > 255 ? 255 : (int)(heightMap[i, j] * 255),
+                                                               (int)(heightMap[i, j] * 255) > 255 ? 255 : (int)(heightMap[i, j] * 255)));
                     }
                 }
                 myBitmap.Save(saveFileDialog.OpenFile(), ImageFormat.Png);
@@ -250,6 +254,26 @@ namespace PerlinLandscape
         private void buttonColorized_Click(object sender, EventArgs e)
         {
             scene.isPolygonColorized = !scene.isPolygonColorized;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            long time = 0;
+            Stopwatch clock = new Stopwatch();
+            double res = 0;
+            for (int i = 0; i < 100; i++)
+            {
+                clock.Restart();
+                res += UpdateBitmap(scene);
+                clock.Stop();
+                time += clock.Elapsed.Ticks;
+            }
+            Console.Write("Results: ");
+            Console.Write((time / 100) / 10000.0);
+            Console.Write("    ");
+            Console.Write(landscape.GetPollygonsDraw().Length);
+            Console.Write("    ");
+            Console.WriteLine(res / 100);
         }
     }
 }

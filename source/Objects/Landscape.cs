@@ -14,9 +14,11 @@ namespace PerlinLandscape
         HeightMap heightMap;
         PollygonDraw[] polygons;
         Dot3d[,] dots;
-        int iceHeight = 140;
-        int stoneHeight = 120;
-        int grassHeight = 10;
+        int iceHeight = 220;
+        int stoneHeight = 180;
+        int dirtHeight = 130;
+        int grassHeight = 15;
+        int sandHeight = 10;
         int waterHeight = 10;
         int maxHeightDelta;
         int step;
@@ -29,6 +31,8 @@ namespace PerlinLandscape
             stoneHeight = maxHeightDelta - stoneHeight;
             grassHeight = maxHeightDelta - grassHeight;
             waterHeight = maxHeightDelta - waterHeight;
+            dirtHeight = maxHeightDelta - dirtHeight;
+            sandHeight = maxHeightDelta - sandHeight;
             this.maxHeightDelta = maxHeightDelta;
             this.step = step;
             if (generate)
@@ -178,10 +182,18 @@ namespace PerlinLandscape
             {
                 pollygon.SetMaterial(new StoneMaterial());
             }
+            else if (currentHeight < dirtHeight)
+            {
+                pollygon.SetMaterial(new DirtMaterial());
+            }
             else if (currentHeight < grassHeight)
             {
                 pollygon.SetMaterial(new MaterialGrass());
                 pollygon.Material.Outrage(5, (int)DateTime.UtcNow.Ticks * DateTime.UtcNow.Millisecond * (int)currentHeight);
+            }
+            else if (currentHeight < sandHeight)
+            {
+                pollygon.SetMaterial(new SandMaterial());
             }
             else
             {

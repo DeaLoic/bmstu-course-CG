@@ -9,9 +9,9 @@ namespace PerlinLandscape.Materials
 {
     class SandMaterial : Material
     {
-        public SandMaterial() : base(0.7, 0.3)
+        public SandMaterial() : base(0.6, 0.3)
         {
-            colorReflect = ReflectFromColor(Color.Yellow);
+            colorReflect = ReflectFromColor(Color.SandyBrown);
         }
     }
 }
